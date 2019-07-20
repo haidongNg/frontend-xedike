@@ -1,23 +1,30 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import "./App.css";
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+
+// component
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import BodyOne from "./components/Body-cotent/BodyOne";
-import BodyTwo from "./components/Body-cotent/BodyTwo";
-import BodyThree from "./components/Body-cotent/BodyThree";
-import BodyFour from "./components/Body-cotent/BodyFour";
+import Home from "./views/home/Home";
+// auth
+import Signup from "./views/auth/signup/Signup";
+import Signin from "./views/auth/signin/Signin";
+import ListTrips from "./views/page-list-trips/ListTrips";
 
 export class App extends Component {
   render() {
     return (
-      <Fragment>
+      <BrowserRouter>
         <Header />
-        <BodyOne />
-        <BodyTwo />
-        <BodyThree />
-        <BodyFour />
+        <Switch>
+          
+          <Route path="/danhsachchuyendi" component={ListTrips} />
+          <Route path="/signin" component={Signin} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/" component={Home} />
+        </Switch>
         <Footer />
-      </Fragment>
+      </BrowserRouter>
     );
   }
 }

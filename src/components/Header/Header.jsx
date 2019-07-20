@@ -1,30 +1,38 @@
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-
 const Header = () => {
   return (
     <Fragment>
       <nav className="navbar" role="navigation" aria-label="main navigation">
-        <AppBar position="sticky" color="inherit">
+        <AppBar position="fixed" color="inherit">
           <Toolbar>
             <div className="navbar-brand">
-              <a className="navbar-item" href="/">
+              <Link className="navbar-item" to="/">
                 <img
                   src="/images/img_logo_footer-min.png"
                   style={{ width: 112, height: 28 }}
                   alt=""
                 />
-              </a>
+              </Link>
             </div>
-            <div id="navbarBasicExample" className="navbar-menu">
+            <div className="navbar-menu">
               <div className="navbar-start" />
               <div className="navbar-end">
                 <div className="navbar-item">
-                  <Button>Danh sách chuyến đi</Button>
-                  <Button>Đăng nhập</Button>
-                  <Button>Đăng kí</Button>
+                  <div className="buttons">
+                    <Button>
+                      <Link to="/danhsachchuyendi">Danh sách chuyến đi</Link>
+                    </Button>
+                    <Button>
+                      <Link to="/signin">Đăng nhập</Link>
+                    </Button>
+                    <Button>
+                      <Link to="/signup">Đăng kí</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

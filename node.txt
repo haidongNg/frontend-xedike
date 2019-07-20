@@ -1,0 +1,11 @@
+home
+auth
+    signin
+        driver
+            profile
+            create-trip
+        passenger
+            profile
+            book-trip
+    signup
+listTrip
