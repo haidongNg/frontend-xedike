@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 const BodyOne = () => {
   return (
     <Fragment>
-      <section className="hero is-info is-medium">
+      <section className="hero is-info is-bold is-medium">
         <div className="hero-body">
           <div className="container">
             <div className="columns is-desktop">

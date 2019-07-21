@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 const BodyFour = () => {
   return (
     <Fragment>
-      <section className="hero is-danger is-medium">
+      <section className="hero is-danger is-bold is-medium">
         <div className="hero-body">
           <div className="container">
             <div className="level is-desktop">

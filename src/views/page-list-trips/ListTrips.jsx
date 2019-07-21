@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import MateritalTable from "material-table";
+import Footer from "../../components/Footer/Footer";
 const ListTrips = () => {
   const [state, setState] = useState({
     columns: [
@@ -21,6 +22,7 @@ const ListTrips = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </Fragment>
   );
 };
