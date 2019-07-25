@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-const BodyFive = () => {
+const SectionFive = () => {
   return (
     <Fragment>
       <section className="hero is-info is-bold is-medium">
@@ -66,4 +66,4 @@ const BodyFive = () => {
   );
 };
 
-export default BodyFive;
+export default SectionFive;

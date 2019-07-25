@@ -5,7 +5,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
-const BodyTwo = () => {
+import { Link } from "react-router-dom";
+const SectionTwo = () => {
   return (
     <Fragment>
       <section className="hero is-primary is-bold is-medium">
@@ -19,8 +20,7 @@ const BodyTwo = () => {
             <div className="level is-mobile" style={{ overflowX: "auto" }}>
               <div className="level-item">
                 <Table>
-                  <TableHead>
-                  </TableHead>
+                  <TableHead />
                   <TableBody>
                     <TableRow>
                       <TableCell>Form - To</TableCell>
@@ -54,7 +54,9 @@ const BodyTwo = () => {
               </div>
             </div>
             <div>
-              <Button>Xem thêm</Button>
+              <Button>
+                <Link to="/danhsachchuyendi">Xem thêm</Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -63,4 +65,4 @@ const BodyTwo = () => {
   );
 };
 
-export default BodyTwo;
+export default SectionTwo;

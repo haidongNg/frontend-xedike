@@ -5,7 +5,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
-const BodyOne = () => {
+const SectionOne = () => {
   return (
     <Fragment>
       <section className="hero is-info is-bold is-medium">
@@ -105,4 +105,4 @@ const BodyOne = () => {
   );
 };
 
-export default BodyOne;
+export default SectionOne;

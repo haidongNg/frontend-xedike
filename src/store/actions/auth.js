@@ -1,16 +1,10 @@
 import Axios from "axios";
 import _ from "lodash";
 import jwtDecode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER } from "../constans/types";
+import { SET_CURRENT_USER } from "../constans/types";
 import setHeaders from "../../shared/helpers/setHeader";
 import getFingerprint from "../../shared/helpers/getFingerprint";
-
-export const getErrors = err => {
-  return {
-    type: GET_ERRORS,
-    payload: err
-  };
-};
+import { getErrors } from "./errors";
 
 export const signUp = (data, callback) => {
   return dispatch => {
@@ -46,9 +40,17 @@ export const signIn = (data, callback) => {
           callback();
         })
         .catch(err => {
-          dispatch(getErrors(_.get(err, "response.data")));
+          dispatch(getErrors(_.get(err, "response.data", "")));
         });
     });
+  };
+};
+
+export const logout = () => {
+  return dispatch => {
+    localStorage.removeItem("token");
+    dispatch(setCurrentUser({}));
+    setHeaders();
   };
 };
 
@@ -56,5 +58,18 @@ export const setCurrentUser = data => {
   return {
     type: SET_CURRENT_USER,
     payload: data
+  };
+};
+
+export const getProfile = (id, callback) => {
+  return dispatch => {
+    Axios.get(`http://localhost:5000/api/users/${id}`)
+      .then(res => {
+        dispatch(setCurrentUser(res.data));
+        callback(res.data);
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "respose.data", "")));
+      });
   };
 };
