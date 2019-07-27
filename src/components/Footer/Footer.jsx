@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "@material-ui/core/Icon";
+import { Call, Email } from "@material-ui/icons";
 const Footer = () => {
   return (
     <footer className="footer">
@@ -16,16 +16,16 @@ const Footer = () => {
             <div className="content is-small">
               <ul>
                 <li>
-                  <Icon>call</Icon>
+                  <Call />
                   <strong>Hỗ trợ hành khách: </strong>{" "}
                   <span>0905.93.34.53</span>
                 </li>
                 <li>
-                  <Icon>call</Icon>
+                  <Call />
                   <strong>Hỗ trợ tài xế: </strong> <span>0905.93.34.53</span>
                 </li>
                 <li>
-                  <Icon>email</Icon>
+                  <Email />
                   <strong>Email: </strong> <span>cs@xedike.vn</span>
                 </li>
               </ul>

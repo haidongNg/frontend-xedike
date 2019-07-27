@@ -5,22 +5,27 @@ import {
   AppBar,
   Toolbar,
   Button,
-  CssBaseline,
   makeStyles,
-  Typography
+  Hidden,
+  IconButton
 } from "@material-ui/core";
+import { Menu } from "@material-ui/icons";
 //
 import { connect } from "react-redux";
 import { logout } from "../../store/actions/auth";
 const useStyles = makeStyles(theme => ({
-  appBar: {
-    borderBottom: `1px solid ${theme.palette.divider}`
+  root: {
+    boxShadow: "none"
   },
-  toolbar: {
-    flexWrap: "wrap"
-  },
-  toolbarTitle: {
+  flexGrow: {
     flexGrow: 1
+  },
+  signOutButton: {
+    marginLeft: theme.spacing(1)
+  },
+  img: {
+    width: 112,
+    height: 28
   }
 }));
 
@@ -29,60 +34,63 @@ const Header = props => {
 
   const handleLogout = () => {
     props.logout();
-  }
-  const renderUseAnonymous = (
+  };
+
+  const renderAnonymous = (
     <Fragment>
-      <Button>
-        <Link to="/signin">Đăng nhập</Link>
-      </Button>
-      <Button>
-        <Link to="/signup">Đăng kí</Link>
-      </Button>
+      <Link to="/signup">
+        <Button className={classes.signOutButton}>Đăng ký</Button>
+      </Link>
+      <Link to="/signin">
+        <Button className={classes.signOutButton}>Đăng nhập</Button>
+      </Link>
     </Fragment>
   );
-  const buttonCreateTrips = (
-    <Fragment>
-      <Button>
-        <Link to="/signin">Tạo chuyến đi</Link>
-      </Button>
-    </Fragment>
+
+  const renderButtonDrive = (
+    <Link to="/taochuyendi">
+      <Button className={classes.signOutButton}>Tạo chuyến đi</Button>
+    </Link>
   );
+
   const renderUser = (
     <Fragment>
-      <Button>
-        <Link to="/profile">Thông tin tài khoản</Link>
-      </Button>
-      <Button>
-        <Link to="/" onClick={handleLogout} >Logout</Link>
-      </Button>
+      <Link to="/thongtintaikhoan">
+        <Button className={classes.signOutButton}>Thông tin tài khoản</Button>
+      </Link>
+      {props.auth.profile.userType === "driver" ? renderButtonDrive : null}
+      <Link to="/">
+        <Button className={classes.signOutButton} onClick={handleLogout}>
+          Đăng xuất
+        </Button>
+      </Link>
     </Fragment>
   );
+
   return (
     <Fragment>
-      <CssBaseline />
-      <AppBar
-        position="static"
-        color="default"
-        elevation={0}
-        className={classes.appBar}
-      >
-        <Toolbar className={classes.toolbar}>
-          <Link to="/" className={classes.toolbarTitle}>
-            <img
-              src="/images/img_logo_footer-min.png"
-              style={{ width: 112, height: 28 }}
-              alt=""
-            />
+      <AppBar className={classes.root} position="relative">
+        <Toolbar>
+          <Link to="/">
+            <img alt="Logo" src="/images/logo.png" className={classes.img} />
           </Link>
-          <nav>
-            <Button>
-              <Link to="/danhsachchuyendi">Danh sách chuyến đi</Link>
-            </Button>
-            {props.secure.profile.userType === "driver"
-              ? buttonCreateTrips
-              : ""}
-            {props.secure.isAuthenticated ? renderUser : renderUseAnonymous}
-          </nav>
+          <div className={classes.flexGrow} />
+          <Hidden mdDown>
+            <Link to="/danhsachchuyendi">
+              <Button className={classes.signOutButton}>
+                Danh sách chuyến đi
+              </Button>
+            </Link>
+            {props.auth.isAuthenticated ? renderUser : renderAnonymous}
+          </Hidden>
+          <Hidden lgUp>
+            <IconButton
+              color="inherit"
+              // onClick={onSidebarOpen}
+            >
+              <Menu />
+            </IconButton>
+          </Hidden>
         </Toolbar>
       </AppBar>
     </Fragment>
@@ -90,10 +98,10 @@ const Header = props => {
 };
 
 const mapStateToProps = state => ({
-  secure: state.auth
+  auth: state.auth
 });
 
 export default connect(
   mapStateToProps,
-  {logout}
+  { logout }
 )(Header);

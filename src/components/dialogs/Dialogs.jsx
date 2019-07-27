@@ -17,7 +17,7 @@ import {
   Radio,
   withStyles
 } from "@material-ui/core";
-const Dialogs = ({...props}) => {
+const Dialogs = (props) => {
   const { onClose, open, ...other } = props;
 
   return (

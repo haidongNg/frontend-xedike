@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import Footer from "../../components/Footer/Footer";
 import { connect } from "react-redux";
 import { getTrips } from "../../store/actions/trips";
 //
@@ -110,7 +109,6 @@ export class ListTrips extends Component {
             </div>
           </div>
         </section>
-        <Footer />
       </Fragment>
     );
   }

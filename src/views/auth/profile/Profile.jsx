@@ -1,60 +1,63 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
+import moment from "moment";
 // Material-UI
 import {
-  Container,
-  Grid,
-  Avatar,
   withStyles,
-  Icon,
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Divider,
   Button,
   FormControl,
   FormControlLabel,
   Input,
   InputLabel,
+  FormLabel,
   RadioGroup,
   Radio,
-  FormLabel
+  Typography,
+  LinearProgress,
+  Avatar
 } from "@material-ui/core";
-
+import { CloudUpload } from "@material-ui/icons";
 //
-import { getProfile } from "../../../store/actions/auth";
+import {
+  getProfile,
+  uploadImage,
+  updateProfile
+} from "../../../store/actions/auth";
 
 const styles = theme => ({
+  root: {
+    padding: theme.spacing(4)
+  },
+  details: {
+    display: "flex"
+  },
   avatar: {
-    display: "block",
-    marginTop: theme.spacing(3),
     marginLeft: "auto",
-    marginRight: "auto",
-    width: 150,
-    height: 150
+    height: 110,
+    width: 100,
+    flexShrink: 0,
+    flexGrow: 0
+  },
+  progress: {
+    marginTop: theme.spacing(2)
+  },
+  uploadButton: {
+    marginRight: theme.spacing(2)
+  },
+  input: {
+    display: "none"
   },
   button: {
     margin: theme.spacing(1)
   },
-  rightIconUpLoad: {
+  rightIcon: {
     marginLeft: theme.spacing(1)
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  },
-  buttonProgress: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    marginTop: -12,
-    marginLeft: -12
-  },
-  wrapperButton: {
-    margin: theme.spacing(1),
-    position: "relative"
-  },
-  input: {
-    display: "none"
   }
 });
 
@@ -64,9 +67,12 @@ export class Profile extends Component {
     this.state = {
       email: "",
       fullName: "",
+      userType: "",
       phone: "",
       gender: "",
-      dateOfBirth: ""
+      dateOfBirth: "",
+      avatar: "",
+      file: null
     };
   }
 
@@ -79,134 +85,220 @@ export class Profile extends Component {
     });
   }
 
-  handleOnChange = name => event => {
+  handleOnChange = event => {
     this.setState({
       ...this.state,
-      [name]: event.target.value
+      [event.target.name]: event.target.value
     });
   };
+
+  handleOnUpLoad = event => {
+    this.setState(
+      {
+        ...this.state,
+        file: event.target.files && event.target.files[0]
+      },
+      () => {
+        const formData = new FormData();
+        formData.append("avatar", this.state.file);
+        this.props.uploadImage(formData, res => {
+          this.setState({
+            avatar: res.user.avatar
+          });
+        });
+      }
+    );
+  };
+
+  handleOnSumit = event => {
+    event.preventDefault();
+    this.props.updateProfile(this.state);
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <Fragment>
-        <Container component="main" maxWidth="md">
-          <Grid container justify="center" alignItems="center" spacing={5}>
-            <Grid item xs={12} sm={3}>
-              <Avatar
-                alt="Avatar User"
-                src="./images/user-ic-min.png"
-                className={classes.avatar}
-              />
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                multiple
-                type="file"
-              />
-              <label htmlFor="contained-button-file">
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  component="span"
-                  className={classes.button}
-                >
-                  Upload
-                  <Icon className={classes.rightIconUpLoad}>cloud_upload</Icon>
-                </Button>
-              </label>
-            </Grid>
-            <Grid item xs={12} sm={9}>
-              <form className={classes.form}>
-                <FormControl fullWidth margin="normal">
-                  <InputLabel>Email</InputLabel>
-                  <Input
-                    type="text"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.handleOnChange("email")}
-                  />
-                  {/* <FormHelperText>{props.error.email}</FormHelperText> */}
-                </FormControl>
+        <div className={classes.root}>
+          <Grid container spacing={4}>
+            <Grid item lg={4} md={6} xl={4} xs={12}>
+              <Card>
+                <CardContent>
+                  <div className={classes.details}>
+                    <div>
+                      <Typography gutterBottom variant="h2">
+                        {this.state.fullName}
+                      </Typography>
+                      <Typography variant="body1">
+                        {this.state.fullName}
+                      </Typography>
+                      <Typography gutterBottom variant="body2">
+                        {this.state.fullName}
+                      </Typography>
+                    </div>
+                    <Avatar
+                      className={classes.avatar}
+                      src={
+                        this.state.avatar &&
+                        `http://localhost:5000/${this.state.avatar}`
+                      }
+                    />
+                  </div>
+                  <div className={classes.progress}>
+                    <Typography variant="body1">
+                      Profile Completeness: 70%
+                    </Typography>
+                    <LinearProgress value={70} variant="determinate" />
+                  </div>
+                </CardContent>
+                <Divider />
+                <CardActions>
+                  {/* <Button
+                    className={classes.uploadButton}
+                    color="primary"
+                    variant="text"
+                  >
+                    Upload picture
+                  </Button> */}
 
-                <FormControl fullWidth margin="normal">
-                  <InputLabel>Họ và Tên</InputLabel>
-                  <Input
-                    type="text"
-                    name="fullName"
-                    value={this.state.fullName}
-                    onChange={this.handleOnChange("fullName")}
+                  <input
+                    className={classes.input}
+                    id="contained-button-file"
+                    type="file"
+                    name="file"
+                    file={this.state.file}
+                    onChange={this.handleOnUpLoad}
                   />
-                  {/* <FormHelperText>{props.error.fullName}</FormHelperText> */}
-                </FormControl>
-                <FormControl fullWidth margin="normal" disabled>
-                  <InputLabel>User Type</InputLabel>
-                  <Input name="userType" value={this.state.userType} />
-                </FormControl>
-                <FormControl component="fieldset" fullWidth margin="normal">
-                  <FormLabel component="legend">Giới tính</FormLabel>
-                  <RadioGroup
-                    aria-label="Gender"
-                    row
-                    name="gender"
-                    value={this.state.gender}
-                    onChange={this.handleOnChange("gender")}
-                  >
-                    <FormControlLabel
-                      value="nu"
-                      control={<Radio />}
-                      label="Nữ"
-                      labelPlacement="end"
-                    />
-                    <FormControlLabel
-                      value="nam"
-                      control={<Radio />}
-                      label="Nam"
-                      labelPlacement="end"
-                    />
-                    <FormControlLabel
-                      value="other"
-                      control={<Radio />}
-                      label="Other"
-                      labelPlacement="end"
-                    />
-                  </RadioGroup>
-                  {/* <FormHelperText>{props.error.gender}</FormHelperText> */}
-                </FormControl>
-                <FormControl fullWidth margin="normal">
-                  <InputLabel>Số điện thoại</InputLabel>
-                  <Input
-                    type="number"
-                    value={this.state.phone}
-                    name="phone"
-                    onChange={this.handleOnChange("phone")}
+                  <label htmlFor="contained-button-file">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      color="default"
+                      className={classes.button}
+                    >
+                      Upload
+                      <CloudUpload className={classes.rightIcon} />
+                    </Button>
+                  </label>
+                </CardActions>
+              </Card>
+            </Grid>
+
+            <Grid item lg={8} md={6} xl={8} xs={12}>
+              <Card>
+                <form
+                  autoComplete="off"
+                  noValidate
+                  onSubmit={this.handleOnSumit}
+                >
+                  <CardHeader
+                    subheader="The information can be edited"
+                    title={this.state.fullName}
                   />
-                  {/* <FormHelperText>{props.error.phone}</FormHelperText> */}
-                </FormControl>
-                <FormControl fullWidth margin="normal">
-                  <FormLabel component="legend">Ngày sinh</FormLabel>
-                  <Input
-                    type="date"
-                    value={this.state.dateOfBirth}
-                    name="dateOfBirth"
-                    onChange={this.handleOnChange("dateOfBirth")}
-                  />
-                  {/* <FormHelperText>{props.error.dateOfBirth}</FormHelperText> */}
-                </FormControl>
-                <div className={classes.wrapperButton}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    className={classes.submit}
-                  >
-                    Cập nhật
-                  </Button>
-                </div>
-              </form>
+                  <Divider />
+                  <CardContent>
+                    <Grid container spacing={3}>
+                      <Grid item md={6} xs={12}>
+                        <FormControl fullWidth required margin="dense">
+                          <InputLabel>Email</InputLabel>
+                          <Input
+                            type="email"
+                            name="email"
+                            value={this.state.email}
+                            onChange={this.handleOnChange}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item md={6} xs={12}>
+                        <FormControl fullWidth required margin="dense">
+                          <InputLabel>Họ và Tên</InputLabel>
+                          <Input
+                            type="text"
+                            name="fullName"
+                            value={this.state.fullName}
+                            onChange={this.handleOnChange}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item md={6} xs={12}>
+                        <FormControl fullWidth required margin="dense" disabled>
+                          <InputLabel>User Type</InputLabel>
+                          <Input type="text" value={this.state.userType} />
+                        </FormControl>
+                      </Grid>
+                      <Grid item md={6} xs={12}>
+                        <FormControl
+                          component="fieldset"
+                          fullWidth
+                          required
+                          margin="dense"
+                        >
+                          <FormLabel component="legend">Giới tính</FormLabel>
+                          <RadioGroup
+                            aria-label="Gender"
+                            row
+                            name="gender"
+                            value={this.state.gender}
+                            onChange={this.handleOnChange}
+                          >
+                            <FormControlLabel
+                              value="nu"
+                              control={<Radio />}
+                              label="Nữ"
+                              labelPlacement="end"
+                            />
+                            <FormControlLabel
+                              value="nam"
+                              control={<Radio />}
+                              label="Nam"
+                              labelPlacement="end"
+                            />
+                            <FormControlLabel
+                              value="other"
+                              control={<Radio />}
+                              label="Other"
+                              labelPlacement="end"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                      </Grid>
+                      <Grid item md={6} xs={12}>
+                        <FormControl fullWidth required margin="dense">
+                          <InputLabel>Số điện thoại</InputLabel>
+                          <Input
+                            type="number"
+                            name="phone"
+                            value={this.state.phone}
+                            onChange={this.handleOnChange}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item md={6} xs={12}>
+                        <FormControl fullWidth required margin="dense">
+                          <InputLabel>Ngày sinh</InputLabel>
+                          <Input
+                            type="date"
+                            name="dateofbirth"
+                            value={moment(this.state.dateOfBirth).format(
+                              "YYYY-MM-DD"
+                            )}
+                            onChange={this.handleOnChange}
+                          />
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                  <Divider />
+                  <CardActions>
+                    <Button type="submit" variant="contained">
+                      update
+                    </Button>
+                  </CardActions>
+                </form>
+              </Card>
             </Grid>
           </Grid>
-        </Container>
+        </div>
       </Fragment>
     );
   }
@@ -217,5 +309,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getProfile }
+  { getProfile, uploadImage, updateProfile }
 )(withStyles(styles)(Profile));

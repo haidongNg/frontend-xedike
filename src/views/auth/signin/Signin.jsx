@@ -1,40 +1,38 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import {
+  Avatar,
+  Button,
   CssBaseline,
   FormControl,
-  InputLabel,
+  FormHelperText,
   Input,
-  Button,
-  Typography,
-  Grid,
-  Avatar,
+  InputLabel,
   FormControlLabel,
   Checkbox,
-  Link,
-  Paper,
-  makeStyles,
-  Box,
-  Icon,
-  FormHelperText
+  Grid,
+  Typography,
+  Container,
+  InputAdornment,
+  IconButton,
+  makeStyles
 } from "@material-ui/core";
+import { LockOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
 
 //
 import { signIn } from "../../../store/actions/auth";
+import ProgressCustom from "../../../components/progress/ProgressCustom";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    height: "100vh"
-  },
-  image: {
-    backgroundImage: "url(./images/login.jpg)",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center"
+  "@global": {
+    body: {
+      backgroundColor: theme.palette.common.white
+    }
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    marginTop: theme.spacing(6),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
@@ -57,99 +55,119 @@ const Signin = props => {
     email: "",
     password: ""
   });
+  // const [open, setOpen] = useState(false);
   const classes = useStyles();
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const timer = React.useRef();
 
-  const handleOnChange = name => event => {
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  const handleShowPassword = () => {
+    setShow(true ? false : true);
+  };
+
+  const handleOnChange = event => {
     setLogin({
       ...login,
-      [name]: event.target.value
+      [event.target.name]: event.target.value
     });
   };
 
   const handleOnSubmit = event => {
     event.preventDefault();
-    props.signIn(login, () => {
-      props.history.push('/')
-    })
-  }
+    if (!loading) {
+      setLoading(true);
+      timer.current = setTimeout(() => {
+        props.signIn(login, () => {
+          props.history.push("/");
+        });
+        setLoading(false);
+      }, 2000);
+    }
+  };
+
   return (
     <Fragment>
-      <Grid container component="main" className={classes.root}>
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Grid item xs={false} sm={4} md={7} className={classes.image} />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <Icon>lock</Icon>
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Đăng Nhập
-            </Typography>
-
-            <form className={classes.form} noValidate onSubmit={handleOnSubmit}>
-              <FormControl
-                fullWidth
-                margin="normal"
-                error={props.error.email ? true : false}
-              >
-                <InputLabel>Email</InputLabel>
-                <Input
-                  type="text"
-                  value={login.email}
-                  name="email"
-                  onChange={handleOnChange("email")}
-                />
-                <FormHelperText>{props.error.email}</FormHelperText>
-              </FormControl>
-              <FormControl
-                fullWidth
-                margin="normal"
-                error={props.error.password ? true : false}
-              >
-                <InputLabel>Mật khẩu</InputLabel>
-                <Input
-                  type="password"
-                  value={login.password}
-                  name="password"
-                  onChange={handleOnChange("password")}
-                />
-                <FormHelperText>{props.error.password}</FormHelperText>
-              </FormControl>
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlined />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Đăng nhập
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={handleOnSubmit}>
+            <FormControl
+              required
+              margin="normal"
+              fullWidth
+              error={props.error.email ? true : false}
+            >
+              <InputLabel>Email</InputLabel>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoFocus
+                value={login.email}
+                onChange={handleOnChange}
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Đăng nhập
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link
-                    variant="body2"
-                    onClick={() => {
-                      props.history.push("/signup");
-                    }}
-                  >
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+              <FormHelperText>{props.error.email}</FormHelperText>
+            </FormControl>
+            <FormControl
+              required
+              margin="normal"
+              fullWidth
+              error={props.error.password ? true : false}
+            >
+              <InputLabel>Mật khẩu</InputLabel>
+              <Input
+                name="password"
+                type={show ? "text" : "password"}
+                id="password"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton edge="end" onClick={handleShowPassword}>
+                      {show ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                value={login.password}
+                onChange={handleOnChange}
+              />
+              <FormHelperText>{props.error.password}</FormHelperText>
+            </FormControl>
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Đăng nhập
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link to="/signin">Forgot password?</Link>
               </Grid>
-              <Box mt={5} />
-            </form>
-          </div>
-        </Grid>
-      </Grid>
+              <Grid item>
+                <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+        {loading && <ProgressCustom size={100} />}
+      </Container>
     </Fragment>
   );
 };

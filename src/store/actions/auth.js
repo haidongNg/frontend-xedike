@@ -73,3 +73,28 @@ export const getProfile = (id, callback) => {
       });
   };
 };
+
+export const uploadImage = (formdata, callback) => {
+  return dispatch => {
+    Axios.post("http://localhost:5000/api/users/upload-avatar", formdata)
+      .then(res => {
+        callback(res.data);
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};
+
+export const updateProfile = (data, callback) => {
+  const { fullName } = data;
+  return dispatch => {
+    Axios.put("http://localhost:5000/api/users/update", { fullName })
+      .then(res => {
+        dispatch(getErrors({}));
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};

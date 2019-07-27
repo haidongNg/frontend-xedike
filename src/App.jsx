@@ -5,52 +5,68 @@ import { connect } from "react-redux";
 import jwtDecode from "jwt-decode";
 // component
 import LandingPage from "./views/LandingPage/LandingPage";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 // auth
 import Signup from "./views/auth/signup/Signup";
 import Signin from "./views/auth/signin/Signin";
 import ListTrips from "./views/page-list-trips/ListTrips";
 import Profile from "./views/auth/profile/Profile";
 import PageNotFound from "./views/page-not-found/PageNotFound";
-
 //
-import { setCurrentUser } from "./store/actions/auth";
-
-//import setHeaders from "./shared/helpers/setHeader";
+import { setCurrentUser, logout } from "./store/actions/auth";
+import setHeaders from "./shared/helpers/setHeader";
+// npm
+import { SnackbarProvider } from "notistack";
 
 export class App extends Component {
   componentDidMount() {
+    // auto login
     const token = localStorage.getItem("token");
+    const fingerprint = localStorage.getItem("fingerprint");
     if (!token) return;
     const decode = jwtDecode(token);
     this.props.setCurrentUser(decode);
+    setHeaders(token, fingerprint);
+    // logout: Neu Date.now > exp (token)
+    if (Date.now() / 1000 > decode.exp) {
+      this.props.logout();
+    }
   }
   render() {
     return (
       <BrowserRouter>
-        <main>
-          <Switch>
-            <Route path="/danhsachchuyendi" component={ListTrips} />
-            <Route path="/signin" component={Signin} />
-            <Route path="/signup" component={Signup} />
-            <Route
-              path="/profile"
-              component={
-                this.props.secure.isAuthenticated ? Profile : PageNotFound
-              }
-            />
-            <Route path="/" component={LandingPage} />
-          </Switch>
-        </main>
+        <SnackbarProvider
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          preventDuplicate
+        >
+          <Header />
+          <main>
+            <Switch>
+              <Route path="/danhsachchuyendi" component={ListTrips} />
+              <Route path="/signin" component={Signin} />
+              <Route path="/signup" component={Signup} />
+              <Route
+                path="/thongtintaikhoan"
+                component={
+                  this.props.auth.isAuthenticated ? Profile : PageNotFound
+                }
+              />
+              <Route path="/" component={LandingPage} />
+            </Switch>
+          </main>
+          <Footer />
+        </SnackbarProvider>
       </BrowserRouter>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  secure: state.auth
+  auth: state.auth
 });
 
 export default connect(
   mapStateToProps,
-  { setCurrentUser }
+  { setCurrentUser, logout }
 )(App);
