@@ -18,6 +18,7 @@ import { setCurrentUser, logout } from "./store/actions/auth";
 import setHeaders from "./shared/helpers/setHeader";
 // npm
 import { SnackbarProvider } from "notistack";
+import BookTrip from "./views/page-list-trips/book-trip/BookTrip";
 
 export class App extends Component {
   componentDidMount() {
@@ -43,16 +44,26 @@ export class App extends Component {
           <Header />
           <main>
             <Switch>
-              <Route path="/danhsachchuyendi" component={ListTrips} />
+              <Route path="/" component={LandingPage} exact />
               <Route path="/signin" component={Signin} />
               <Route path="/signup" component={Signup} />
+              <Route path="/danhsachchuyendi" component={ListTrips} />
               <Route
                 path="/thongtintaikhoan"
                 component={
                   this.props.auth.isAuthenticated ? Profile : PageNotFound
                 }
               />
-              <Route path="/" component={LandingPage} />
+              <Route
+                path="/book-trip/:id"
+                component={
+                  this.props.auth.isAuthenticated &&
+                  this.props.auth.profile.userType === "passenger"
+                    ? BookTrip
+                    : PageNotFound
+                }
+              />
+              {/* <RouteGruad path="/book-trip" component={BookTrip} auth={this.prop}/> */}
             </Switch>
           </main>
           <Footer />

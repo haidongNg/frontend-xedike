@@ -2,13 +2,13 @@ import React from "react";
 import { makeStyles, SnackbarContent, IconButton } from "@material-ui/core";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { Close, CheckCircle, Warning, Error, Info } from "@material-ui/icons";
+import { Close, CheckCircle, Warning, ErrorOutline, Info } from "@material-ui/icons";
 import { amber, green} from '@material-ui/core/colors';
 
 const variantIcon = {
   success: CheckCircle,
   warning: Warning,
-  error: Error,
+  error: ErrorOutline,
   info: Info
 };
 
@@ -38,7 +38,7 @@ const useStyles1 = makeStyles(theme => ({
   },
 }));
 
-const Notification = props => {
+const NotificationCustom = props => {
   const classes = useStyles1();
   const { className, message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
@@ -52,7 +52,7 @@ const Notification = props => {
         </span>
       }
       action={[
-        <IconButton key="close" color="inherit" onClick={onClose}>
+        <IconButton key="close" aria-label="Close" color="inherit" onClick={onClose}>
           <Close className={classes.icon} />
         </IconButton>
       ]}
@@ -65,8 +65,7 @@ Notification.propTypes = {
   className: PropTypes.string,
   message: PropTypes.string,
   onClose: PropTypes.func,
-  variant: PropTypes.string,
-//   variant: PropTypes.oneOf(["error", "info", "success", "warning"]).isRequired
+  variant: PropTypes.oneOf(["error", "info", "success", "warning"]).isRequired
 };
 
-export default Notification;
+export default NotificationCustom;

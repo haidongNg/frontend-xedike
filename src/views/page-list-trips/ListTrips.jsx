@@ -10,9 +10,10 @@ import {
   TableRow,
   Paper,
   withStyles,
-  Button
+  Button,
+  Snackbar
 } from "@material-ui/core";
-import Dialogs from "../../components/dialogs/Dialogs";
+import NotificationCustom from "../../components/notification/NotificationCustom";
 
 const styles = theme => ({
   root: {
@@ -30,14 +31,7 @@ export class ListTrips extends Component {
     super(props);
     this.state = {
       data: [],
-      open: false,
-      formBook: {
-        locationGetIn: '',
-        locationGetOff: '',
-        paymentMethod: '',
-        numberOfBookingSeats: 1,
-        notes: ''
-      }
+      open: false
     };
   }
 
@@ -47,14 +41,21 @@ export class ListTrips extends Component {
     });
   }
 
-  handleClickOpen = value => {
-    this.setState({ open: true });
-  };
-  handleClose = () => {
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") return;
     this.setState({ open: false });
   };
-  renderListTables = () => {
-    return this.state.data.map((data, index) => (
+
+  handleOnClickRoute = id => {
+    const { isAuthenticated, profile } = this.props.secure;
+    if (!isAuthenticated || profile.userType === "driver") {
+      this.setState({ open: true });
+    } else {
+      this.props.history.push(`/book-trip/${id}`);
+    }
+  };
+  renderListTables = () =>
+    this.state.data.map((data, index) => (
       <TableRow key={index}>
         <TableCell component="th" scope="row">
           {data.locationFrom}
@@ -67,18 +68,19 @@ export class ListTrips extends Component {
         <TableCell align="right">{data.tree}</TableCell>
         <TableCell align="center">
           <Button
+            fullWidth
+            size="small"
             variant="outlined"
             color="inherit"
-            onClick={this.handleClickOpen}
+            onClick={() => this.handleOnClickRoute(data._id)}
           >
-            Đặt vé
+            Xem chuyến đi
           </Button>
         </TableCell>
       </TableRow>
     ));
-  };
   render() {
-    const { classes, secure } = this.props;
+    const { classes } = this.props;
     return (
       <Fragment>
         <section className="hero is-primary is-medium">
@@ -101,14 +103,24 @@ export class ListTrips extends Component {
                   <TableBody>{this.renderListTables()}</TableBody>
                 </Table>
               </Paper>
-              <Dialogs
-                onClose={this.handleClose}
-                open={this.state.open}
-                {...this.state.formBook}
-              />
             </div>
           </div>
         </section>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
+          open={this.state.open}
+          autoHideDuration={3000}
+          onClose={this.handleClose}
+        >
+          <NotificationCustom
+            onClose={this.handleClose}
+            variant="error"
+            message={this.props.secure.profile.userType === "driver" ? 'Bạn không có quyền truy cập' : 'Bạn chưa đăng nhập' }
+          />
+        </Snackbar>
       </Fragment>
     );
   }
