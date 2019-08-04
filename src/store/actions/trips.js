@@ -4,7 +4,7 @@ import { getErrors } from "./errors";
 
 export const getTrips = callback => {
   return dispatch => {
-    Axios.get("http://localhost:5000/api/trips/")
+    Axios.get("http://localhost:5000/api/v1/trips/")
       .then(res => {
         dispatch(getErrors({}));
         callback(res.data);
@@ -17,7 +17,7 @@ export const getTrips = callback => {
 
 export const getTrip = (id, callback) => {
   return dispatch => {
-    Axios.get(`http://localhost:5000/api/trips/${id}`)
+    Axios.get(`http://localhost:5000/api/v1/trips/${id}`)
       .then(res => {
         callback(res.data);
       })
@@ -29,7 +29,7 @@ export const getTrip = (id, callback) => {
 
 export const reservation = (tripid, data, callback) => {
   return dispatch => {
-    Axios.post(`http://localhost:5000/api/trips/book/${tripid}`, data)
+    Axios.post(`http://localhost:5000/api/v1/trips/book/${tripid}`, data)
       .then(res => {
         callback();
       })

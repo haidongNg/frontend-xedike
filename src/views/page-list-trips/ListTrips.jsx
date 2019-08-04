@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { PureComponent, Fragment } from "react";
 import { connect } from "react-redux";
 import { getTrips } from "../../store/actions/trips";
 //
@@ -26,7 +26,7 @@ const styles = theme => ({
   }
 });
 
-export class ListTrips extends Component {
+export class ListTrips extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

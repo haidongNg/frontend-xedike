@@ -127,7 +127,7 @@ export class BookTrip extends Component {
                         Số ghế còn trống: {this.state.info.availableSeats}
                       </Typography>
                       <Typography variant="body1">
-                        {/* Tài xế: {info.driverId.fullName} */}
+                        
                       </Typography>
                     </div>
                     <Avatar className={classes.avatar} src="" />

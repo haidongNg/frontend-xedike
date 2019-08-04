@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import jwtDecode from "jwt-decode";
 // component
@@ -47,9 +47,9 @@ export class App extends Component {
               <Route path="/" component={LandingPage} exact />
               <Route path="/signin" component={Signin} />
               <Route path="/signup" component={Signup} />
-              <Route path="/danhsachchuyendi" component={ListTrips} />
+              <Route path="/list-trips" component={ListTrips} />
               <Route
-                path="/thongtintaikhoan"
+                path="/profile"
                 component={
                   this.props.auth.isAuthenticated ? Profile : PageNotFound
                 }
@@ -64,6 +64,7 @@ export class App extends Component {
                 }
               />
               {/* <RouteGruad path="/book-trip" component={BookTrip} auth={this.prop}/> */}
+              <Redirect to="/" />
             </Switch>
           </main>
           <Footer />

@@ -1,35 +1,19 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import moment from "moment";
 // Material-UI
-import {
-  withStyles,
-  Grid,
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Divider,
-  Button,
-  FormControl,
-  FormControlLabel,
-  Input,
-  InputLabel,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  Typography,
-  LinearProgress,
-  Avatar
-} from "@material-ui/core";
-import { CloudUpload } from "@material-ui/icons";
+import { withStyles, Grid, Container } from "@material-ui/core";
 //
 import {
   getProfile,
   uploadImage,
   updateProfile
 } from "../../../store/actions/auth";
-
+import { getDriverProfile } from "../../../store/actions/drivers";
+import DriverInfo from "./DriverInfo";
+import CarInfo from "./CarInfo";
+import ProfileInfo from "./ProfileInfo";
+import UploadAvatar from "./UploadAvatar";
+import UploadCar from "./UploadCar";
 const styles = theme => ({
   root: {
     padding: theme.spacing(4)
@@ -58,6 +42,9 @@ const styles = theme => ({
   },
   rightIcon: {
     marginLeft: theme.spacing(1)
+  },
+  cardBottom: {
+    marginTop: theme.spacing(2)
   }
 });
 
@@ -65,45 +52,53 @@ export class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      fullName: "",
-      userType: "",
-      phone: "",
-      gender: "",
-      dateOfBirth: "",
-      avatar: "",
-      file: null
+      infoProfile: {
+        email: "",
+        fullName: "",
+        userType: "",
+        phone: "",
+        gender: "",
+        dateOfBirth: "",
+        avatar: "",
+        file: null
+      }
     };
   }
 
   componentDidMount() {
     const token = localStorage.getItem("token");
-    if (!token) return;
     const { profile } = this.props.secure;
-    this.props.getProfile(profile.id, user => {
-      this.setState(user);
+    if (!token) return;
+    this.props.getProfile(profile.id || profile._id, user => {
+      this.setState({ infoProfile: user });
     });
+    if (profile.userType === "driver")
+      this.props.getDriverProfile(profile.id || profile._id);
   }
 
   handleOnChange = event => {
     this.setState({
-      ...this.state,
-      [event.target.name]: event.target.value
+      infoProfile: {
+        ...this.state.infoProfile,
+        [event.target.name]: event.target.value
+      }
     });
   };
 
   handleOnUpLoad = event => {
     this.setState(
       {
-        ...this.state,
-        file: event.target.files && event.target.files[0]
+        infoProfile: {
+          ...this.state.infoProfile,
+          file: event.target.files && event.target.files[0]
+        }
       },
       () => {
         const formData = new FormData();
-        formData.append("avatar", this.state.file);
+        formData.append("avatar", this.state.infoProfile.file);
         this.props.uploadImage(formData, res => {
           this.setState({
-            avatar: res.user.avatar
+            infoProfile: { ...this.state.infoProfile, avatar: res.user.avatar }
           });
         });
       }
@@ -112,193 +107,45 @@ export class Profile extends Component {
 
   handleOnSumit = event => {
     event.preventDefault();
-    this.props.updateProfile(this.state);
+    this.props.updateProfile(this.state.infoProfile);
   };
 
   render() {
     const { classes } = this.props;
     return (
       <Fragment>
-        <div className={classes.root}>
+        <Container className={classes.root}>
           <Grid container spacing={4}>
             <Grid item lg={4} md={6} xl={4} xs={12}>
-              <Card>
-                <CardContent>
-                  <div className={classes.details}>
-                    <div>
-                      <Typography gutterBottom variant="h2">
-                        {this.state.fullName}
-                      </Typography>
-                      <Typography variant="body1">
-                        {this.state.fullName}
-                      </Typography>
-                      <Typography gutterBottom variant="body2">
-                        {this.state.fullName}
-                      </Typography>
-                    </div>
-                    <Avatar
-                      className={classes.avatar}
-                      src={
-                        this.state.avatar &&
-                        `http://localhost:5000/${this.state.avatar}`
-                      }
-                    />
-                  </div>
-                  <div className={classes.progress}>
-                    <Typography variant="body1">
-                      Profile Completeness: 70%
-                    </Typography>
-                    <LinearProgress value={70} variant="determinate" />
-                  </div>
-                </CardContent>
-                <Divider />
-                <CardActions>
-                  {/* <Button
-                    className={classes.uploadButton}
-                    color="primary"
-                    variant="text"
-                  >
-                    Upload picture
-                  </Button> */}
-
-                  <input
-                    className={classes.input}
-                    id="contained-button-file"
-                    type="file"
-                    name="file"
-                    file={this.state.file}
-                    onChange={this.handleOnUpLoad}
-                  />
-                  <label htmlFor="contained-button-file">
-                    <Button
-                      variant="contained"
-                      component="span"
-                      color="default"
-                      className={classes.button}
-                    >
-                      Upload
-                      <CloudUpload className={classes.rightIcon} />
-                    </Button>
-                  </label>
-                </CardActions>
-              </Card>
+              <UploadAvatar
+                classes={classes}
+                values={this.state.infoProfile}
+                handleOnUpLoad={this.handleOnUpLoad}
+              />
             </Grid>
 
             <Grid item lg={8} md={6} xl={8} xs={12}>
-              <Card>
-                <form
-                  autoComplete="off"
-                  noValidate
-                  onSubmit={this.handleOnSumit}
-                >
-                  <CardHeader
-                    subheader="The information can be edited"
-                    title={this.state.fullName}
-                  />
-                  <Divider />
-                  <CardContent>
-                    <Grid container spacing={3}>
-                      <Grid item md={6} xs={12}>
-                        <FormControl fullWidth required margin="dense">
-                          <InputLabel>Email</InputLabel>
-                          <Input
-                            type="email"
-                            name="email"
-                            value={this.state.email}
-                            onChange={this.handleOnChange}
-                          />
-                        </FormControl>
-                      </Grid>
-                      <Grid item md={6} xs={12}>
-                        <FormControl fullWidth required margin="dense">
-                          <InputLabel>Họ và Tên</InputLabel>
-                          <Input
-                            type="text"
-                            name="fullName"
-                            value={this.state.fullName}
-                            onChange={this.handleOnChange}
-                          />
-                        </FormControl>
-                      </Grid>
-                      <Grid item md={6} xs={12}>
-                        <FormControl fullWidth required margin="dense" disabled>
-                          <InputLabel>User Type</InputLabel>
-                          <Input type="text" value={this.state.userType} />
-                        </FormControl>
-                      </Grid>
-                      <Grid item md={6} xs={12}>
-                        <FormControl
-                          component="fieldset"
-                          fullWidth
-                          required
-                          margin="dense"
-                        >
-                          <FormLabel component="legend">Giới tính</FormLabel>
-                          <RadioGroup
-                            aria-label="Gender"
-                            row
-                            name="gender"
-                            value={this.state.gender}
-                            onChange={this.handleOnChange}
-                          >
-                            <FormControlLabel
-                              value="nu"
-                              control={<Radio />}
-                              label="Nữ"
-                              labelPlacement="end"
-                            />
-                            <FormControlLabel
-                              value="nam"
-                              control={<Radio />}
-                              label="Nam"
-                              labelPlacement="end"
-                            />
-                            <FormControlLabel
-                              value="other"
-                              control={<Radio />}
-                              label="Other"
-                              labelPlacement="end"
-                            />
-                          </RadioGroup>
-                        </FormControl>
-                      </Grid>
-                      <Grid item md={6} xs={12}>
-                        <FormControl fullWidth required margin="dense">
-                          <InputLabel>Số điện thoại</InputLabel>
-                          <Input
-                            type="number"
-                            name="phone"
-                            value={this.state.phone}
-                            onChange={this.handleOnChange}
-                          />
-                        </FormControl>
-                      </Grid>
-                      <Grid item md={6} xs={12}>
-                        <FormControl fullWidth required margin="dense">
-                          <InputLabel>Ngày sinh</InputLabel>
-                          <Input
-                            type="date"
-                            name="dateofbirth"
-                            value={moment(this.state.dateOfBirth).format(
-                              "YYYY-MM-DD"
-                            )}
-                            onChange={this.handleOnChange}
-                          />
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                  <Divider />
-                  <CardActions>
-                    <Button type="submit" variant="contained">
-                      update
-                    </Button>
-                  </CardActions>
-                </form>
-              </Card>
+              <ProfileInfo
+                values={this.state.infoProfile}
+                handleOnChange={this.handleOnChange}
+                handleOnSumit={this.handleOnSumit}
+              />
             </Grid>
           </Grid>
-        </div>
+          {this.props.secure.profile.userType === "driver" ? (
+            <Fragment>
+              <Grid container spacing={4}>
+                <Grid item lg={4} md={6} xl={4} xs={12} />
+                <Grid item lg={8} md={6} xl={8} xs={12}>
+                  <DriverInfo />
+                  <CarInfo />
+                </Grid>
+              </Grid>
+            </Fragment>
+          ) : (
+            ""
+          )}
+        </Container>
       </Fragment>
     );
   }
@@ -309,5 +156,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getProfile, uploadImage, updateProfile }
+  { getProfile, uploadImage, updateProfile, getDriverProfile }
 )(withStyles(styles)(Profile));

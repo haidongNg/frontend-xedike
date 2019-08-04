@@ -55,7 +55,7 @@ const Header = props => {
 
   const renderUser = (
     <Fragment>
-      <Link to="/thongtintaikhoan">
+      <Link to="/profile">
         <Button className={classes.signOutButton}>Thông tin tài khoản</Button>
       </Link>
       {props.auth.profile.userType === "driver" ? renderButtonDrive : null}
@@ -76,7 +76,7 @@ const Header = props => {
           </Link>
           <div className={classes.flexGrow} />
           <Hidden mdDown>
-            <Link to="/danhsachchuyendi">
+            <Link to="/list-trips">
               <Button className={classes.signOutButton}>
                 Danh sách chuyến đi
               </Button>
