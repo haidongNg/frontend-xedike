@@ -47,6 +47,17 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: "relative"
+  },
+  buttonProgress: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -8,
+    marginLeft: -12
   }
 }));
 
@@ -105,6 +116,7 @@ const Signin = props => {
           <form className={classes.form} noValidate onSubmit={handleOnSubmit}>
             <FormControl
               required
+              disabled={loading}
               margin="normal"
               fullWidth
               error={props.error.email ? true : false}
@@ -122,6 +134,7 @@ const Signin = props => {
             </FormControl>
             <FormControl
               required
+              disabled={loading}
               margin="normal"
               fullWidth
               error={props.error.password ? true : false}
@@ -144,18 +157,26 @@ const Signin = props => {
               <FormHelperText>{props.error.password}</FormHelperText>
             </FormControl>
             <FormControlLabel
+              disabled={loading}
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Đăng nhập
-            </Button>
+            <div className={classes.wrapper}>
+              <Button
+                type="submit"
+                disabled={loading}
+                fullWidth
+                variant="outlined"
+                color="primary"
+                className={classes.submit}
+              >
+                Đăng nhập
+              </Button>
+              {loading && (
+                <ProgressCustom size={24} className={classes.buttonProgress} />
+              )}
+            </div>
+
             <Grid container>
               <Grid item xs>
                 <Link to="/signin">Forgot password?</Link>
@@ -166,7 +187,6 @@ const Signin = props => {
             </Grid>
           </form>
         </div>
-        {loading && <ProgressCustom size={100} />}
       </Container>
     </Fragment>
   );

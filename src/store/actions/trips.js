@@ -27,6 +27,18 @@ export const getTrip = (id, callback) => {
   };
 };
 
+export const createTrip = (data, callback) => {
+  return dispatch => {
+    Axios.post("http://localhost:5000/api/v1/trips/create-trip", data)
+      .then(res => {
+        callback();
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};
+
 export const reservation = (tripid, data, callback) => {
   return dispatch => {
     Axios.post(`http://localhost:5000/api/v1/trips/book/${tripid}`, data)

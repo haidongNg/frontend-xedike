@@ -19,6 +19,7 @@ import setHeaders from "./shared/helpers/setHeader";
 // npm
 import { SnackbarProvider } from "notistack";
 import BookTrip from "./views/page-list-trips/book-trip/BookTrip";
+import LoginGuard from "./components/guard/LoginGuard";
 
 export class App extends Component {
   componentDidMount() {
@@ -42,31 +43,43 @@ export class App extends Component {
           preventDuplicate
         >
           <Header />
-          <main>
-            <Switch>
-              <Route path="/" component={LandingPage} exact />
-              <Route path="/signin" component={Signin} />
-              <Route path="/signup" component={Signup} />
-              <Route path="/list-trips" component={ListTrips} />
-              <Route
-                path="/profile"
-                component={
-                  this.props.auth.isAuthenticated ? Profile : PageNotFound
-                }
-              />
-              <Route
-                path="/book-trip/:id"
-                component={
-                  this.props.auth.isAuthenticated &&
-                  this.props.auth.profile.userType === "passenger"
-                    ? BookTrip
-                    : PageNotFound
-                }
-              />
-              {/* <RouteGruad path="/book-trip" component={BookTrip} auth={this.prop}/> */}
-              <Redirect to="/" />
-            </Switch>
-          </main>
+          <Switch>
+            <Route path="/" component={LandingPage} exact />
+            <Route path="/signin" component={Signin} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/list-trips" component={ListTrips} />
+            {/* <LoginGuard path="/profile" component={Profile} /> */}
+            <Route
+              path="/profile"
+              component={
+                this.props.auth.isAuthenticated &&
+                this.props.auth.profile.userType === "passenger"
+                  ? Profile
+                  : PageNotFound
+              }
+            />
+            <Route
+              path="/profile-driver/:id"
+              component={
+                this.props.auth.isAuthenticated &&
+                this.props.auth.profile.userType === "driver"
+                  ? Profile
+                  : PageNotFound
+              }
+            />
+            <Route
+              path="/book-trip/:id"
+              component={
+                this.props.auth.isAuthenticated &&
+                this.props.auth.profile.userType === "passenger"
+                  ? BookTrip
+                  : PageNotFound
+              }
+            />
+            {/* <RouteGruad path="/book-trip" component={BookTrip} auth={this.prop}/> */}
+            <Redirect to="/" />
+          </Switch>
+
           <Footer />
         </SnackbarProvider>
       </BrowserRouter>

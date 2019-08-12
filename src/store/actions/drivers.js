@@ -25,11 +25,31 @@ export const getDriverProfile = (id, callback) => {
 };
 
 export const createDriverProfile = (data, callback) => {
+  const { address, passportId, mainJob } = data;
   return dispatch => {
-    Axios.post(
-      "http://localhost:5000/api/v1/users/drivers/create-profile",
-      data
-    )
+    Axios.post("http://localhost:5000/api/v1/users/drivers/create-profile", {
+      address,
+      passportId,
+      mainJob
+    })
+      .then(res => {
+        dispatch(getErrors({}));
+        callback();
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};
+
+export const updateDriverProfile = (data, callback) => {
+  const { address, passportId, mainJob } = data;
+  return dispatch => {
+    Axios.put("http://localhost:5000/api/v1/users/drivers/update-profile", {
+      address,
+      passportId,
+      mainJob
+    })
       .then(res => {
         dispatch(getErrors({}));
         callback();
@@ -41,11 +61,66 @@ export const createDriverProfile = (data, callback) => {
 };
 
 export const addCar = (data, callback) => {
+  const { brand, model, manufacturingYear, licensePlate, numberOfSeats } = data;
   return dispatch => {
-    Axios.post("http://localhost:5000/api/v1/users/drivers/add-car", data)
+    Axios.post("http://localhost:5000/api/v1/users/drivers/add-car", {
+      brand,
+      model,
+      manufacturingYear,
+      licensePlate,
+      numberOfSeats
+    })
       .then(res => {
         dispatch(getErrors({}));
         callback();
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};
+
+export const updateCar = (id, data, callback) => {
+  const { brand, model, manufacturingYear, licensePlate, numberOfSeats } = data;
+  return dispatch => {
+    Axios.put(`http://localhost:5000/api/v1/users/drivers/update-car/${id}`, {
+      brand,
+      model,
+      manufacturingYear,
+      licensePlate,
+      numberOfSeats
+    })
+      .then(res => {
+        dispatch(getErrors({}));
+        callback();
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};
+
+export const uploadCarImage = (carId, formData, callback) => {
+  return dispatch => {
+    Axios.post(
+      `http://localhost:5000/api/v1/users/drivers/upload-car/${carId}`,
+      formData
+    )
+      .then(res => {
+        console.log(res.data);
+        callback(res.data);
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};
+
+export const getCarInfo = (carId, callback) => {
+  return dispatch => {
+    Axios.get(`http://localhost:5000/api/v1/users/drivers/${carId}/cars`)
+      .then(res => {
+        callback(res.data);
       })
       .catch(err => {
         dispatch(getErrors(_.get(err, "response.data", "")));

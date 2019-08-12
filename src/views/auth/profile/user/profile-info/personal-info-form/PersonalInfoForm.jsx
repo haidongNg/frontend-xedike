@@ -16,12 +16,12 @@ import {
   Button,
   CardActions
 } from "@material-ui/core";
-const ProfileInfo = props => {
-  const { values, handleOnChange, handleOnSumit } = props;
+const PersonalInfoForm = props => {
+  const { values, handleOnChange, handleOnSubmit } = props;
   return (
     <Fragment>
       <Card>
-        <form autoComplete="off" noValidate onSubmit={handleOnSumit}>
+        <form autoComplete="off" noValidate onSubmit={handleOnSubmit}>
           <CardHeader
             subheader="The information can be edited"
             title={values.fullName}
@@ -35,7 +35,7 @@ const ProfileInfo = props => {
                   <Input
                     type="email"
                     name="email"
-                    value={values.email}
+                    value={values.email || ""}
                     onChange={handleOnChange}
                   />
                 </FormControl>
@@ -46,7 +46,7 @@ const ProfileInfo = props => {
                   <Input
                     type="text"
                     name="fullName"
-                    value={values.fullName}
+                    value={values.fullName || ""}
                     onChange={handleOnChange}
                   />
                 </FormControl>
@@ -54,7 +54,7 @@ const ProfileInfo = props => {
               <Grid item md={6} xs={12}>
                 <FormControl fullWidth required margin="dense" disabled>
                   <InputLabel>User Type</InputLabel>
-                  <Input type="text" value={values.userType} />
+                  <Input type="text" value={values.userType || ""} />
                 </FormControl>
               </Grid>
               <Grid item md={6} xs={12}>
@@ -69,7 +69,7 @@ const ProfileInfo = props => {
                     aria-label="Gender"
                     row
                     name="gender"
-                    value={values.gender}
+                    value={values.gender || ""}
                     onChange={handleOnChange}
                   >
                     <FormControlLabel
@@ -99,7 +99,7 @@ const ProfileInfo = props => {
                   <Input
                     type="number"
                     name="phone"
-                    value={values.phone}
+                    value={values.phone || ""}
                     onChange={handleOnChange}
                   />
                 </FormControl>
@@ -109,8 +109,10 @@ const ProfileInfo = props => {
                   <InputLabel>Ngày sinh</InputLabel>
                   <Input
                     type="date"
-                    name="dateofbirth"
-                    value={moment(values.dateOfBirth).format("YYYY-MM-DD")}
+                    name="dateOfBirth"
+                    value={
+                      moment(values.dateOfBirth).format("YYYY-MM-DD")
+                    }
                     onChange={handleOnChange}
                   />
                 </FormControl>
@@ -120,7 +122,7 @@ const ProfileInfo = props => {
           <Divider />
           <CardActions>
             <Button type="submit" variant="contained">
-            Cập nhật thông tin
+              Cập nhật thông tin
             </Button>
           </CardActions>
         </form>
@@ -129,4 +131,4 @@ const ProfileInfo = props => {
   );
 };
 
-export default ProfileInfo;
+export default PersonalInfoForm;

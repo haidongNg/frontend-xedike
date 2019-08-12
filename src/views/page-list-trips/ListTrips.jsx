@@ -38,7 +38,9 @@ export class ListTrips extends PureComponent {
   componentDidMount() {
     this.props.getTrips(data => {
       this.setState({ data: data });
+      console.log(data)
     });
+   
   }
 
   handleClose = (event, reason) => {
@@ -58,14 +60,11 @@ export class ListTrips extends PureComponent {
     this.state.data.map((data, index) => (
       <TableRow key={index}>
         <TableCell component="th" scope="row">
-          {data.locationFrom}
+          {data.locationFrom} - {data.locationTo}
         </TableCell>
-        <TableCell align="right">{data.locationTo}</TableCell>
         <TableCell align="right">{data.driverId.fullName}</TableCell>
         <TableCell align="right">{data.startTime}</TableCell>
         <TableCell align="right">{data.availableSeats}</TableCell>
-        <TableCell align="right">{data.tree}</TableCell>
-        <TableCell align="right">{data.tree}</TableCell>
         <TableCell align="center">
           <Button
             fullWidth
@@ -90,12 +89,9 @@ export class ListTrips extends PureComponent {
                 <Table className={classes.table}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Điểm đi</TableCell>
-                      <TableCell>Điểm đến</TableCell>
-                      <TableCell align="right">Tài xế</TableCell>
-                      <TableCell align="right">Thời gian</TableCell>
-                      <TableCell align="right">Số ghế trống</TableCell>
-                      <TableCell align="right">Quãng đường</TableCell>
+                      <TableCell>Điểm đi - Điểm đến - Thời gian</TableCell>
+                      <TableCell>Xe - so ghe</TableCell>
+                      <TableCell align="right">Tài xế rating</TableCell>
                       <TableCell align="right">Giá vé</TableCell>
                       <TableCell align="center" />
                     </TableRow>

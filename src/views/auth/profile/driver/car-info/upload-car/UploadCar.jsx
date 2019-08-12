@@ -7,28 +7,48 @@ import {
   CardContent,
   Button,
   CardActions,
-  LinearProgress
+  makeStyles
 } from "@material-ui/core";
 import { CloudUpload } from "@material-ui/icons";
-const UploadAvatar = props => {
-  const { values, handleOnUpLoad, classes } = props;
+const useStyles = makeStyles(theme => ({
+  details: {
+    display: "flex"
+  },
+  avatar: {
+    marginLeft: "auto",
+    height: 110,
+    width: 100,
+    flexShrink: 0,
+    flexGrow: 0
+  },
+  uploadButton: {
+    marginRight: theme.spacing(2)
+  },
+  input: {
+    display: "none"
+  },
+  button: {
+    margin: theme.spacing(1)
+  },
+  rightIcon: {
+    marginLeft: theme.spacing(1)
+  }
+}));
+const UploadCar = props => {
+  const { file, avatar, handleOnUpLoad } = props;
+  const classes = useStyles();
   return (
     <Fragment>
       <Card>
         <CardContent>
           <div className={classes.details}>
             <div>
-              <Typography gutterBottom variant="h2">
-                {values.fullName}
-              </Typography>
-              <Typography variant="body1">{values.fullName}</Typography>
-              <Typography gutterBottom variant="body2">
-                {values.fullName}
-              </Typography>
+              <Typography gutterBottom variant="h2" />
+              <Typography variant="body1" />
             </div>
             <Avatar
               className={classes.avatar}
-              src={values.avatar && `http://localhost:5000/${values.avatar}`}
+              src={avatar && `http://localhost:5000/${avatar}`}
             />
           </div>
         </CardContent>
@@ -47,7 +67,7 @@ const UploadAvatar = props => {
             id="contained-button-file"
             type="file"
             name="file"
-            file={values.file}
+            file={file}
             onChange={handleOnUpLoad}
           />
           <label htmlFor="contained-button-file">
@@ -67,4 +87,5 @@ const UploadAvatar = props => {
   );
 };
 
-export default UploadAvatar;
+export default UploadCar;
+

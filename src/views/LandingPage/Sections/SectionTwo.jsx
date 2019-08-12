@@ -28,7 +28,7 @@ const SectionTwo = () => {
                       <TableCell align="right">Driver</TableCell>
                       <TableCell align="right">Gia tien</TableCell>
                       <TableCell align="right">
-                        <Button variant="contained">Đặt xe</Button>
+                        <Button variant="contained">Xem chuyến đi</Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -37,7 +37,7 @@ const SectionTwo = () => {
                       <TableCell align="right">Driver</TableCell>
                       <TableCell align="right">Gia tien</TableCell>
                       <TableCell align="right">
-                        <Button variant="contained">Đặt xe</Button>
+                        <Button variant="contained">Xem chuyến đi</Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -46,7 +46,7 @@ const SectionTwo = () => {
                       <TableCell align="right">Driver</TableCell>
                       <TableCell align="right">Gia tien</TableCell>
                       <TableCell align="right">
-                        <Button variant="contained">Đặt xe</Button>
+                        <Button variant="contained">Xem chuyến đi</Button>
                       </TableCell>
                     </TableRow>
                   </TableBody>

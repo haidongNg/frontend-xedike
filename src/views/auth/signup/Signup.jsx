@@ -27,6 +27,7 @@ import { connect } from "react-redux";
 import { signUp } from "../../../store/actions/auth";
 //
 import ProgressCustom from "../../../components/progress/ProgressCustom";
+import moment from "moment";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -54,13 +55,25 @@ const useStyles = makeStyles(theme => ({
   menu: {
     width: 200
   },
-  buttonProgress: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
+  wrapper: {
+    margin: theme.spacing(1),
+    position: "relative"
   },
+  buttonProgress: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -8,
+    marginLeft: -12
+    // position: "fixed",
+    // left: "50%",
+    // top: "50%",
+    // marginTop: -12,
+    // marginLeft: -12,
+    // width: "100%",
+    // height: "100%",
+    // zIndex: 9999
+  }
 }));
 
 const Signup = props => {
@@ -72,7 +85,7 @@ const Signup = props => {
     userType: "",
     phone: "",
     gender: "",
-    dateOfBirth: ""
+    dateOfBirth: new Date()
   });
   const [loading, setLoading] = useState(false);
   const timer = useRef();
@@ -119,6 +132,7 @@ const Signup = props => {
               <Grid item xs={12}>
                 <FormControl
                   fullWidth
+                  disabled={loading}
                   required
                   margin="dense"
                   error={props.error.email ? true : false}
@@ -137,6 +151,7 @@ const Signup = props => {
               <Grid item xs={12} sm={6}>
                 <FormControl
                   fullWidth
+                  disabled={loading}
                   required
                   margin="dense"
                   error={props.error.password ? true : false}
@@ -154,6 +169,7 @@ const Signup = props => {
               <Grid item xs={12} sm={6}>
                 <FormControl
                   fullWidth
+                  disabled={loading}
                   required
                   margin="dense"
                   error={props.error.password2 ? true : false}
@@ -171,6 +187,7 @@ const Signup = props => {
               <Grid item xs={12}>
                 <FormControl
                   fullWidth
+                  disabled={loading}
                   required
                   margin="dense"
                   error={props.error.fullName ? true : false}
@@ -188,6 +205,7 @@ const Signup = props => {
               <Grid item xs={12}>
                 <FormControl
                   fullWidth
+                  disabled={loading}
                   required
                   margin="dense"
                   error={props.error.userType ? true : false}
@@ -209,6 +227,7 @@ const Signup = props => {
                 <FormControl
                   component="fieldset"
                   fullWidth
+                  disabled={loading}
                   required
                   margin="dense"
                   error={props.error.gender ? true : false}
@@ -246,6 +265,7 @@ const Signup = props => {
               <Grid item xs={12} sm={6}>
                 <FormControl
                   fullWidth
+                  disabled={loading}
                   required
                   margin="dense"
                   error={props.error.phone ? true : false}
@@ -263,6 +283,7 @@ const Signup = props => {
               <Grid item xs={12} sm={6}>
                 <FormControl
                   fullWidth
+                  disabled={loading}
                   required
                   margin="dense"
                   error={props.error.dateOfBirth ? true : false}
@@ -270,7 +291,7 @@ const Signup = props => {
                   <InputLabel shrink>Ngày sinh</InputLabel>
                   <Input
                     type="date"
-                    value={signup.dateOfBirth}
+                    value={moment(signup.dateOfBirth).format("YYYY-MM-DD")}
                     name="dateOfBirth"
                     onChange={handleOnChange}
                   />
@@ -279,6 +300,7 @@ const Signup = props => {
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
+                  disabled={loading}
                   control={
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
@@ -286,16 +308,22 @@ const Signup = props => {
                 />
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Đăng ký
-            </Button>
-            {loading && <ProgressCustom size={24} className={classes.buttonProgress} />}
+            <div className={classes.wrapper}>
+              <Button
+                disabled={loading}
+                type="submit"
+                fullWidth
+                variant="outlined"
+                color="primary"
+                className={classes.submit}
+              >
+                Đăng ký
+              </Button>
+              {loading && (
+                <ProgressCustom size={24} className={classes.buttonProgress} />
+              )}
+            </div>
+
             <Grid container justify="flex-end">
               <Grid item>
                 <Link to="/signin">Already have an account? Sign in</Link>
@@ -303,7 +331,6 @@ const Signup = props => {
             </Grid>
           </form>
         </div>
-        
       </Container>
     </Fragment>
   );

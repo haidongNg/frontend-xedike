@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 // Material UI
 import {
@@ -13,6 +13,7 @@ import { Menu } from "@material-ui/icons";
 //
 import { connect } from "react-redux";
 import { logout } from "../../store/actions/auth";
+import CreateTrip from "../create-trip/CreateTrip";
 const useStyles = makeStyles(theme => ({
   root: {
     boxShadow: "none"
@@ -30,8 +31,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Header = props => {
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
-
   const handleLogout = () => {
     props.logout();
   };
@@ -48,14 +49,28 @@ const Header = props => {
   );
 
   const renderButtonDrive = (
-    <Link to="/taochuyendi">
-      <Button className={classes.signOutButton}>Tạo chuyến đi</Button>
-    </Link>
+    <Button className={classes.signOutButton} onClick={() => handleClickOpen()}>
+      Tạo chuyến đi
+    </Button>
   );
 
+  const handleClickOpen = title => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const renderUser = (
     <Fragment>
-      <Link to="/profile">
+      <Link
+        to={
+          props.auth.profile.userType === "driver"
+            ? `/profile-driver/${props.auth.profile.id ||
+                props.auth.profile._id}`
+            : "profile"
+        }
+      >
         <Button className={classes.signOutButton}>Thông tin tài khoản</Button>
       </Link>
       {props.auth.profile.userType === "driver" ? renderButtonDrive : null}
@@ -69,7 +84,7 @@ const Header = props => {
 
   return (
     <Fragment>
-      <AppBar className={classes.root} position="relative">
+      <AppBar className={classes.root} position="static">
         <Toolbar>
           <Link to="/">
             <img alt="Logo" src="/images/logo.png" className={classes.img} />
@@ -91,6 +106,7 @@ const Header = props => {
               <Menu />
             </IconButton>
           </Hidden>
+          <CreateTrip open={open} onClose={handleClose} />
         </Toolbar>
       </AppBar>
     </Fragment>
