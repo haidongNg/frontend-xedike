@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
+import moment from "moment";
 import PropTypes from "prop-types";
 import {
   Dialog,
@@ -11,12 +12,10 @@ import {
   FormControl,
   InputLabel,
   Input,
-  Select,
-  MenuItem,
-  InputAdornment,
+  InputAdornment
 } from "@material-ui/core";
 import { createTrip } from "../../store/actions/trips";
-
+import SelectCustom from "../select-custom/SelectCustom";
 
 const CreateTrip = props => {
   const { onClose, open, disable } = props;
@@ -66,36 +65,30 @@ const CreateTrip = props => {
           <DialogTitle>Tạo chuyến xe</DialogTitle>
           <DialogContent>
             <DialogContentText>Thông tin chuyến xe</DialogContentText>
-
-            <FormControl fullWidth required margin="dense">
-              <InputLabel>Nơi đi</InputLabel>
-              <Select
-                name="locationFrom"
-                value={valueForm.locationFrom}
-                onChange={handleOnchange}
-              >
-                <MenuItem value="TP Hồ Chí Minh">TP Hồ Chí Minh</MenuItem>
-                <MenuItem value="TP Hà Nội">TP Hà Nội</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl fullWidth required margin="dense">
-              <InputLabel>Nơi đến</InputLabel>
-              <Select
-                name="locationTo"
-                value={valueForm.locationTo}
-                onChange={handleOnchange}
-              >
-                <MenuItem value="TP Hồ Chí Minh">TP Hồ Chí Minh</MenuItem>
-                <MenuItem value="TP Hà Nội">TP Hà Nội</MenuItem>
-              </Select>
-            </FormControl>
-
+            <SelectCustom
+              required
+              variant="standard"
+              margin="dense"
+              name="locationFrom"
+              label="Điểm đi"
+              value={valueForm.locationFrom}
+              onChangeSelect={handleOnchange}
+            />
+            <SelectCustom
+              required
+              variant="standard"
+              margin="dense"
+              label="Điểm đến"
+              name="locationTo"
+              value={valueForm.locationTo}
+              onChangeSelect={handleOnchange}
+            />
             <FormControl margin="dense" fullWidth>
               <InputLabel shrink>Ngày khởi hành</InputLabel>
               <Input
-                type="date"
+                type="datetime-local"
                 name="startTime"
-                value={valueForm.startTime}
+                value={moment(valueForm.startTime).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}
                 onChange={handleOnchange}
               />
             </FormControl>

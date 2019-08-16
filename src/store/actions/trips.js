@@ -1,13 +1,20 @@
 import Axios from "axios";
 import _ from "lodash";
 import { getErrors } from "./errors";
+import { LIST_TRIPS } from "../constans/types";
+
+export const listTrips = (data) => ({
+  type: LIST_TRIPS,
+  payload: data
+})
 
 export const getTrips = callback => {
   return dispatch => {
     Axios.get("http://localhost:5000/api/v1/trips/")
       .then(res => {
         dispatch(getErrors({}));
-        callback(res.data);
+        dispatch(listTrips(res.data));
+        callback();
       })
       .catch(err => {
         dispatch(getErrors(_.get(err, "response.data", "")));

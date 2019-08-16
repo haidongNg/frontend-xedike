@@ -127,3 +127,15 @@ export const getCarInfo = (carId, callback) => {
       });
   };
 };
+
+export const getDriverUSer = callback => {
+  return dispatch => {
+    Axios.get("http://localhost:5000/api/v1/users/drivers/getDriverUsers")
+      .then(res => {
+        callback(res.data);
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};

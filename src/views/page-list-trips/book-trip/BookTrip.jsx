@@ -93,6 +93,7 @@ export class BookTrip extends Component {
 
             <Grid item lg={6} md={6} xl={6} xs={12}>
               <BookTripForm
+                info={this.state.info}
                 valuesForm={this.state.values}
                 handleOnchange={this.handleOnchange}
                 handleOnSubmit={this.handleOnSubmit}

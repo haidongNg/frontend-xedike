@@ -15,10 +15,9 @@ import {
   FormLabel,
   RadioGroup,
   Radio,
-  Select,
-  MenuItem
 } from "@material-ui/core";
-const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit }) => {
+import SelectCustom from "../../../../components/select-custom/SelectCustom";
+const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit, info }) => {
   return (
     <Card>
       <form autoComplete="off" noValidate onSubmit={handleOnSubmit}>
@@ -30,31 +29,26 @@ const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit }) => {
         <CardContent>
           <Grid container spacing={3}>
             <Grid item md={6} xs={12}>
-              <FormControl fullWidth required margin="dense">
-                <InputLabel>Điểm đón</InputLabel>
-                <Select
-                  name="locationGetIn"
-                  value={valuesForm.locationGetIn}
-                  onChange={handleOnchange}
-                >
-                  <MenuItem value="TP Hồ Chí Minh">TP Hồ Chí Minh</MenuItem>
-                  <MenuItem value="TP Hà Nội">TP Hà Nội</MenuItem>
-                </Select>
-              </FormControl>
+              <SelectCustom
+                required
+                variant="standard"
+                margin="dense"
+                label="Điểm đón"
+                name="locationGetIn"
+                value={valuesForm.locationGetIn}
+                onChangeSelect={handleOnchange}
+              />
             </Grid>
             <Grid item md={6} xs={12}>
-              <FormControl fullWidth required margin="dense">
-                <InputLabel>Điểm đến</InputLabel>
-
-                <Select
-                  name="locationGetOff"
-                  value={valuesForm.locationGetOff}
-                  onChange={handleOnchange}
-                >
-                  <MenuItem value="TP Hồ Chí Minh">TP Hồ Chí Minh</MenuItem>
-                  <MenuItem value="TP Hà Nội">TP Hà Nội</MenuItem>
-                </Select>
-              </FormControl>
+              <SelectCustom
+                required
+                variant="standard"
+                margin="dense"
+                label="Điểm đến"
+                name="locationGetOff"
+                value={valuesForm.locationGetOff}
+                onChangeSelect={handleOnchange}
+              />
             </Grid>
 
             <Grid item md={6} xs={12}>
@@ -115,7 +109,13 @@ const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit }) => {
         </CardContent>
         <Divider />
         <CardActions>
-          <Button fullWidth type="submit" variant="outlined" color="primary">
+          <Button
+            disabled={info.availableSeats === 0 ? true : false}
+            fullWidth
+            type="submit"
+            variant="outlined"
+            color="primary"
+          >
             Đặt chỗ
           </Button>
         </CardActions>

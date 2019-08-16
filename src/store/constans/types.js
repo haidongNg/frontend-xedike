@@ -2,3 +2,5 @@ export const GET_ERRORS = "GET_ERRORS";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const NOTIFICATIONS = "NOTIFICATIONS";
 export const PROFILEDRIVER = "PROFILEDRIVER";
+export const DATA_LIST_USER = "DATA_LIST_USER";
+export const LIST_TRIPS = "LIST_TRIPS";

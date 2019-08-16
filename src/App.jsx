@@ -20,6 +20,7 @@ import setHeaders from "./shared/helpers/setHeader";
 import { SnackbarProvider } from "notistack";
 import BookTrip from "./views/page-list-trips/book-trip/BookTrip";
 import LoginGuard from "./components/guard/LoginGuard";
+import TripHistory from "./views/auth/trip-history/TripHistory";
 
 export class App extends Component {
   componentDidMount() {
@@ -48,6 +49,15 @@ export class App extends Component {
             <Route path="/signin" component={Signin} />
             <Route path="/signup" component={Signup} />
             <Route path="/list-trips" component={ListTrips} />
+            <Route
+              path="/book-trip/:id"
+              component={
+                this.props.auth.isAuthenticated &&
+                this.props.auth.profile.userType === "passenger"
+                  ? BookTrip
+                  : PageNotFound
+              }
+            />
             {/* <LoginGuard path="/profile" component={Profile} /> */}
             <Route
               path="/profile"
@@ -67,15 +77,14 @@ export class App extends Component {
                   : PageNotFound
               }
             />
+
             <Route
-              path="/book-trip/:id"
+              path={"/trip-history"}
               component={
-                this.props.auth.isAuthenticated &&
-                this.props.auth.profile.userType === "passenger"
-                  ? BookTrip
-                  : PageNotFound
+                this.props.auth.isAuthenticated ? TripHistory : PageNotFound
               }
             />
+
             {/* <RouteGruad path="/book-trip" component={BookTrip} auth={this.prop}/> */}
             <Redirect to="/" />
           </Switch>

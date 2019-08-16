@@ -89,7 +89,11 @@ export const uploadImage = (formdata, callback) => {
 export const updateProfile = (data, callback) => {
   const { fullName, gender, dateOfBirth } = data;
   return dispatch => {
-    Axios.put("http://localhost:5000/api/v1/users/update", { fullName, gender, dateOfBirth })
+    Axios.put("http://localhost:5000/api/v1/users/update", {
+      fullName,
+      gender,
+      dateOfBirth
+    })
       .then(res => {
         dispatch(getErrors({}));
         callback();
@@ -99,3 +103,4 @@ export const updateProfile = (data, callback) => {
       });
   };
 };
+
