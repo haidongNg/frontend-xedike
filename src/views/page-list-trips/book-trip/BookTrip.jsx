@@ -69,16 +69,38 @@ export class BookTrip extends Component {
 
   handleOnSubmit = event => {
     event.preventDefault();
-    const id = this.state.info._id;
-    this.props.reservation(id, this.state.values, () => {
+    const { profile, isAuthenticated } = this.props.auth;
+    if (isAuthenticated && profile.userType === "passenger") {
+      const id = this.state.info._id;
+      this.props.reservation(id, this.state.values, () => {
+        this.setState({ open: true });
+        this.props.history.push("/list-trips");
+        this.setState({
+          values: {
+            locationGetIn: "",
+            locationGetOff: "",
+            paymentMethod: "",
+            numberOfBookingSeats: 1,
+            notes: ""
+          }
+        });
+      });
+    } else {
       this.setState({ open: true });
-      this.props.history.push("/list-trips");
-    });
+    }
   };
 
   handleClose = (event, reason) => {
     if (reason === "clickaway") return;
     this.setState({ open: false });
+  };
+
+  message = () => {
+    const { profile, isAuthenticated } = this.props.auth;
+    if (!isAuthenticated) return "Bạn chưa đăng nhập";
+    return isAuthenticated && profile.userType === "passenger"
+      ? "Đặt vé thành công"
+      : "Bạn không có quyền đặt xe";
   };
 
   render() {
@@ -112,8 +134,13 @@ export class BookTrip extends Component {
         >
           <NotificationCustom
             onClose={this.handleClose}
-            variant="success"
-            message="Đặt vé thành công"
+            variant={
+              this.props.auth.isAuthenticated &&
+              this.props.auth.profile.userType === "passenger"
+                ? "success"
+                : "error"
+            }
+            message={this.message()}
           />
         </Snackbar>
       </Fragment>

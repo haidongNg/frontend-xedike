@@ -18,7 +18,7 @@ import { createTrip } from "../../store/actions/trips";
 import SelectCustom from "../select-custom/SelectCustom";
 
 const CreateTrip = props => {
-  const { onClose, open, disable } = props;
+  const { onClose, open } = props;
   const [valueForm, setValueForm] = useState({
     locationFrom: "",
     locationTo: "",

@@ -12,10 +12,8 @@ import {
   TablePagination,
   Paper,
   withStyles,
-  Snackbar,
   TableFooter
 } from "@material-ui/core";
-import NotificationCustom from "../../components/notification/NotificationCustom";
 import EnhancedTableToolbar from "../../components/enhanced-table-toolbar/EnhancedTableToolbar";
 import TableRows from "../../components/table-row/TableRows";
 import TablePaginationActions from "../../components/table-pagination-actions/TablePaginationActions";
@@ -42,7 +40,6 @@ export class ListTrips extends PureComponent {
     super(props);
     this.state = {
       data: [],
-      open: false,
       page: 0,
       rowsPerPage: 5,
       search: {
@@ -57,20 +54,8 @@ export class ListTrips extends PureComponent {
     this.props.getTrips();
   }
 
-  componentDidMount() {}
-
-  handleClose = (event, reason) => {
-    if (reason === "clickaway") return;
-    this.setState({ open: false });
-  };
-
   handleOnClickRoute = id => {
-    const { isAuthenticated, profile } = this.props.secure;
-    if (!isAuthenticated || profile.usnewPageerType === "driver") {
-      this.setState({ open: true });
-    } else {
-      this.props.history.push(`/book-trip/${id}`);
-    }
+    this.props.history.push(`/book-trip/${id}`);
   };
 
   handleSearch = event => {
@@ -101,6 +86,7 @@ export class ListTrips extends PureComponent {
       )
       .map((data, index) => (
         <TableRows
+          hidden={true}
           key={index}
           index={index}
           data={data}
@@ -128,7 +114,7 @@ export class ListTrips extends PureComponent {
       );
     return (
       <Fragment>
-        <section className="hero is-primary is-bold">
+        <section className="hero is-bold">
           <div className="hero-body">
             <div className="container">
               <h1 className="title">Danh sách chuyến đi</h1>
@@ -185,25 +171,6 @@ export class ListTrips extends PureComponent {
             </div>
           </div>
         </section>
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right"
-          }}
-          open={this.state.open}
-          autoHideDuration={3000}
-          onClose={this.handleClose}
-        >
-          <NotificationCustom
-            onClose={this.handleClose}
-            variant="error"
-            message={
-              this.props.secure.profile.userType === "driver"
-                ? "Bạn không có quyền truy cập"
-                : "Bạn chưa đăng nhập"
-            }
-          />
-        </Snackbar>
       </Fragment>
     );
   }

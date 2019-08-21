@@ -2,33 +2,36 @@ import React from "react";
 import {
   TableRow,
   TableCell,
-  Button,
   Avatar,
   makeStyles,
-  Grid
+  Grid,
+  Chip,
+  IconButton
 } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
+import { calcRate } from '../../shared/utils/utils'
 import {
   PersonPinCircle,
   Place,
   Group,
   DriveEta,
   AccessTime,
-  DateRange
+  DateRange,
+  Cancel,
+  RateReview
 } from "@material-ui/icons";
 import moment from "moment";
-import {calcRate} from '../../shared//utils/utils'
 const useStyles = makeStyles(theme => ({
   avatar: {
     margin: 10
   }
 }));
-const TableRows = ({ index, data, handleOnClickRoute, hidden }) => {
+const TableTripOfPassenger = ({ index, data, handleClickItem, deleteTripUser }) => {
   const classes = useStyles();
+  
   return (
     <TableRow key={index}>
-      {console.log(data)}
-      <TableCell component="th" scope="row">
+      <TableCell >
         <PersonPinCircle />
         {data.trip.locationFrom}
       </TableCell>
@@ -47,19 +50,19 @@ const TableRows = ({ index, data, handleOnClickRoute, hidden }) => {
           </Grid>
         </Grid>
       </TableCell>
-      <TableCell align="right">
+      <TableCell>
         <Grid container spacing={2}>
           <Grid item>
-            <DriveEta />{" "}
+            <DriveEta />
             {data.driver.carInfo[data.driver.carInfo.length - 1].brand}
           </Grid>
           <Grid item>
-            <Group />{" "}
+            <Group />
             {data.driver.carInfo[data.driver.carInfo.length - 1].numberOfSeats}
           </Grid>
         </Grid>
       </TableCell>
-      <TableCell align="right">
+      <TableCell>
         <Grid container spacing={2}>
           <Grid item>
             <Avatar
@@ -69,28 +72,24 @@ const TableRows = ({ index, data, handleOnClickRoute, hidden }) => {
           </Grid>
           <Grid item>
             {data.driver.userId.fullName || data.trip.driverId.fullName}
-            <Rating value={calcRate(data.driver.passengerRates)} readOnly />
+            <Rating value={calcRate(data.driver.passengers)} readOnly />
           </Grid>
         </Grid>
       </TableCell>
-      <TableCell align="right">{data.trip.tree}VNĐ</TableCell>
-      {!hidden ? (
-         <TableCell />
-      ) : (
-        <TableCell align="center">
-          <Button
-            fullWidth
-            size="small"
-            variant="outlined"
-            color="inherit"
-            onClick={() => handleOnClickRoute(data.trip._id)}
-          >
-            Xem chuyến đi
-          </Button>
-        </TableCell>
-      )}
+      <TableCell>{data.trip.tree}VNĐ</TableCell>
+      <TableCell>
+        <Chip color="secondary" label="Đang chạy" />
+      </TableCell>
+      <TableCell>
+        <IconButton  onClick={handleClickItem}>
+          <RateReview />
+        </IconButton>
+        <IconButton onClick={deleteTripUser} >
+          <Cancel />
+        </IconButton>
+      </TableCell>
     </TableRow>
   );
 };
 
-export default TableRows;
+export default TableTripOfPassenger;

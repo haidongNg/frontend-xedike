@@ -14,7 +14,7 @@ import {
   InputLabel,
   FormLabel,
   RadioGroup,
-  Radio,
+  Radio
 } from "@material-ui/core";
 import SelectCustom from "../../../../components/select-custom/SelectCustom";
 const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit, info }) => {
@@ -74,7 +74,7 @@ const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit, info }) => {
                   aria-label="Gender"
                   row
                   name="paymentMethod"
-                  defaultValue={valuesForm.paymentMethod || "tienmat"}
+                  defaultValue={valuesForm.paymentMethod}
                   onChange={handleOnchange}
                 >
                   <FormControlLabel
@@ -110,7 +110,15 @@ const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit, info }) => {
         <Divider />
         <CardActions>
           <Button
-            disabled={info.availableSeats === 0 ? true : false}
+            disabled={
+                (info.availableSeats ||
+                info.locationGetIn ||
+                info.locationGetOff ||
+                info.paymentMethod
+              ) === undefined
+                ? true
+                : false
+            }
             fullWidth
             type="submit"
             variant="outlined"

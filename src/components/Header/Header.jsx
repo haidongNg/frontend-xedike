@@ -54,6 +54,46 @@ const Header = props => {
     </Button>
   );
 
+  const renderUserDriver = (
+    <Fragment>
+      <Link
+        to={`/profile-driver/${props.auth.profile.id ||
+          props.auth.profile._id}`}
+      >
+        <Button className={classes.signOutButton}>Thông tin tài khoản</Button>
+      </Link>
+      <Link
+        to={`/dashboard-driver/${props.auth.profile.id ||
+          props.auth.profile._id}`}
+      >
+        <Button>Quản lý chuyến đi</Button>
+      </Link>
+      <Button
+        className={classes.signOutButton}
+        onClick={() => handleClickOpen()}
+      >
+        Tạo chuyến đi
+      </Button>
+    </Fragment>
+  );
+
+  const renderUserPassenger = (
+    <Fragment>
+      <Link to={"/profile"}>
+        <Button className={classes.signOutButton}>Thông tin tài khoản</Button>
+      </Link>
+
+      <Link to={"/trip-history"}>
+        <Button>Lịch sử chuyến đi</Button>
+      </Link>
+      <Link
+        to={`/dashboard-passenger/${props.auth.profile.id ||
+          props.auth.profile._id}`}
+      >
+        <Button>Quản lý chuyến đi</Button>
+      </Link>
+    </Fragment>
+  );
   const handleClickOpen = title => {
     setOpen(true);
   };
@@ -63,17 +103,9 @@ const Header = props => {
   };
   const renderUser = (
     <Fragment>
-      <Link
-        to={
-          props.auth.profile.userType === "driver"
-            ? `/profile-driver/${props.auth.profile.id ||
-                props.auth.profile._id}`
-            : "profile"
-        }
-      >
-        <Button className={classes.signOutButton}>Thông tin tài khoản</Button>
-      </Link>
-      {props.auth.profile.userType === "driver" ? renderButtonDrive : null}
+      {props.auth.profile.userType === "driver"
+        ? renderUserDriver
+        : renderUserPassenger}
       <Link to="/">
         <Button className={classes.signOutButton} onClick={handleLogout}>
           Đăng xuất

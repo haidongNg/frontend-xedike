@@ -19,8 +19,9 @@ import setHeaders from "./shared/helpers/setHeader";
 // npm
 import { SnackbarProvider } from "notistack";
 import BookTrip from "./views/page-list-trips/book-trip/BookTrip";
-import LoginGuard from "./components/guard/LoginGuard";
 import TripHistory from "./views/auth/trip-history/TripHistory";
+import DashboardDriver from "./views/auth/dashboard-driver/DashboardDriver";
+import DashboardPassenger from "./views/auth/dashboard-passenger/DashboardPassenger";
 
 export class App extends Component {
   componentDidMount() {
@@ -49,15 +50,7 @@ export class App extends Component {
             <Route path="/signin" component={Signin} />
             <Route path="/signup" component={Signup} />
             <Route path="/list-trips" component={ListTrips} />
-            <Route
-              path="/book-trip/:id"
-              component={
-                this.props.auth.isAuthenticated &&
-                this.props.auth.profile.userType === "passenger"
-                  ? BookTrip
-                  : PageNotFound
-              }
-            />
+            <Route path="/book-trip/:id" component={BookTrip} />
             {/* <LoginGuard path="/profile" component={Profile} /> */}
             <Route
               path="/profile"
@@ -84,8 +77,24 @@ export class App extends Component {
                 this.props.auth.isAuthenticated ? TripHistory : PageNotFound
               }
             />
-
-            {/* <RouteGruad path="/book-trip" component={BookTrip} auth={this.prop}/> */}
+            <Route
+              path="/dashboard-passenger/:id"
+              component={
+                this.props.auth.isAuthenticated &&
+                this.props.auth.profile.userType === "passenger"
+                  ? DashboardPassenger
+                  : PageNotFound
+              }
+            />
+            <Route
+              path="/dashboard-driver/:id"
+              component={
+                this.props.auth.isAuthenticated &&
+                this.props.auth.profile.userType === "driver"
+                  ? DashboardDriver
+                  : PageNotFound
+              }
+            />
             <Redirect to="/" />
           </Switch>
 

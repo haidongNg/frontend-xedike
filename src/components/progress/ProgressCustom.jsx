@@ -1,14 +1,8 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import clsx from 'clsx';
-const useStyles = makeStyles({
-  root: {
-    position: "relative"
-  }
-});
+import clsx from "clsx";
+
 const ProgressCustom = props => {
-  const classes = useStyles();
   const { className, size } = props;
   return (
     <CircularProgress

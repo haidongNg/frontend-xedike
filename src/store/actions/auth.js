@@ -8,7 +8,7 @@ import { getErrors } from "./errors";
 
 export const signUp = (data, callback) => {
   return dispatch => {
-    Axios.post("http://localhost:5000/api/v1/users/register", data)
+    Axios.post("/api/v1/users/register", data)
       .then(res => {
         dispatch(getErrors({}));
         callback();
@@ -23,7 +23,7 @@ export const signIn = (data, callback) => {
   const { email, password } = data;
   return dispatch => {
     getFingerprint(fingerprint => {
-      Axios.post("http://localhost:5000/api/v1/users/login", {
+      Axios.post("/api/v1/users/login", {
         email,
         password,
         fingerprint
@@ -63,7 +63,7 @@ export const setCurrentUser = data => {
 
 export const getProfile = (id, callback) => {
   return dispatch => {
-    Axios.get(`http://localhost:5000/api/v1/users/${id}`)
+    Axios.get(`/api/v1/users/${id}`)
       .then(res => {
         dispatch(setCurrentUser(res.data));
         callback(res.data);
@@ -76,7 +76,7 @@ export const getProfile = (id, callback) => {
 
 export const uploadImage = (formdata, callback) => {
   return dispatch => {
-    Axios.post("http://localhost:5000/api/v1/users/upload-avatar", formdata)
+    Axios.post("/api/v1/users/upload-avatar", formdata)
       .then(res => {
         callback(res.data);
       })
@@ -89,7 +89,7 @@ export const uploadImage = (formdata, callback) => {
 export const updateProfile = (data, callback) => {
   const { fullName, gender, dateOfBirth } = data;
   return dispatch => {
-    Axios.put("http://localhost:5000/api/v1/users/update", {
+    Axios.put("/api/v1/users/update", {
       fullName,
       gender,
       dateOfBirth
