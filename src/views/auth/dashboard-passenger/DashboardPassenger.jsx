@@ -32,8 +32,6 @@ export class DashboardPassenger extends Component {
     this.props.getTripHistory();
   }
 
-  com;
-
   handleClickItem = data => {
     const { trip } = data;
     const passenger = trip.passengers.find(
