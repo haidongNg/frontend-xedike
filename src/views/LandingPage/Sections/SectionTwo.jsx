@@ -28,7 +28,7 @@ const SectionTwo = () => {
                       <TableCell align="right">Driver</TableCell>
                       <TableCell align="right">Gia tien</TableCell>
                       <TableCell align="right">
-                        <Button variant="contained">Xem chuyến đi</Button>
+                        <Button variant="text">Xem chuyến đi</Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -37,7 +37,7 @@ const SectionTwo = () => {
                       <TableCell align="right">Driver</TableCell>
                       <TableCell align="right">Gia tien</TableCell>
                       <TableCell align="right">
-                        <Button variant="contained">Xem chuyến đi</Button>
+                        <Button variant="text">Xem chuyến đi</Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -46,7 +46,7 @@ const SectionTwo = () => {
                       <TableCell align="right">Driver</TableCell>
                       <TableCell align="right">Gia tien</TableCell>
                       <TableCell align="right">
-                        <Button variant="contained">Xem chuyến đi</Button>
+                        <Button variant="text">Xem chuyến đi</Button>
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -55,7 +55,7 @@ const SectionTwo = () => {
             </div>
             <div>
               <Button>
-                <Link to="/danhsachchuyendi">Xem thêm</Link>
+                <Link to="/list-trips">Xem thêm</Link>
               </Button>
             </div>
           </div>

@@ -112,7 +112,7 @@ const BookTripInfo = ({ info, classes }) => {
                       </Typography>
                     </Box>
                     <Box component="div" className="level-right level-item">
-                      <h6 className="subtitle is-6">{info.tree} VNĐ</h6>
+                      <h6 className="subtitle is-6">{info.fee} VNĐ</h6>
                     </Box>
                   </Box>
                 </ListItemText>

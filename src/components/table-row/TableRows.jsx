@@ -27,7 +27,6 @@ const TableRows = ({ index, data, handleOnClickRoute, hidden }) => {
   const classes = useStyles();
   return (
     <TableRow key={index}>
-      {console.log(data)}
       <TableCell component="th" scope="row">
         <PersonPinCircle />
         {data.trip.locationFrom}
@@ -63,7 +62,7 @@ const TableRows = ({ index, data, handleOnClickRoute, hidden }) => {
         <Grid container spacing={2}>
           <Grid item>
             <Avatar
-              src={data.driver.userId.avatar || data.trip.driverId.avatar}
+              src={`http://localhost:5000/${data.driver.userId.avatar || data.trip.driverId.avatar}`}
               className={classes.avatar}
             />
           </Grid>
@@ -73,7 +72,7 @@ const TableRows = ({ index, data, handleOnClickRoute, hidden }) => {
           </Grid>
         </Grid>
       </TableCell>
-      <TableCell align="right">{data.trip.tree}VNĐ</TableCell>
+      <TableCell align="right">{data.trip.fee}VNĐ</TableCell>
       {!hidden ? (
          <TableCell />
       ) : (

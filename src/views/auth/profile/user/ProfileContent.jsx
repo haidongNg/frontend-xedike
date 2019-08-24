@@ -3,13 +3,15 @@ import { connect } from "react-redux";
 import {
   getProfile,
   updateProfile,
-  uploadImage
+  uploadImage,
+  changePasswordAct
 } from "../../../../store/actions/auth";
 import PersonalInfoForm from "./profile-info/personal-info-form/PersonalInfoForm";
 import UploadAvatar from "./profile-info/upload-avatar/UploadAvatar";
 
 import { Grid, Snackbar } from "@material-ui/core";
 import NotificationCustom from "../../../../components/notification/NotificationCustom";
+import ChangePassword from "../change-password/ChangePassword";
 
 export class ProfileContent extends Component {
   constructor(props) {
@@ -25,7 +27,11 @@ export class ProfileContent extends Component {
         userType: "",
         file: null
       },
-      open: false
+      open: false,
+      changePass: {
+        oldPassword: "",
+        newPassword: ""
+      }
     };
   }
   componentDidMount() {
@@ -57,13 +63,22 @@ export class ProfileContent extends Component {
     }
   }
 
-  handleOnChange = event => {
-    this.setState({
-      infoProfile: {
-        ...this.state.infoProfile,
-        [event.target.name]: event.target.value
-      }
-    });
+  handleOnChange = (event, title) => {
+    if (title === "update") {
+      this.setState({
+        infoProfile: {
+          ...this.state.infoProfile,
+          [event.target.name]: event.target.value
+        }
+      });
+    } else if (title === "pass") {
+      this.setState({
+        changePass: {
+          ...this.state.changePass,
+          [event.target.name]: event.target.value
+        }
+      });
+    }
   };
 
   handleOnUpLoad = event => {
@@ -86,11 +101,18 @@ export class ProfileContent extends Component {
     );
   };
 
-  handleOnSubmit = event => {
+  handleOnSubmit = (event, title) => {
     event.preventDefault();
-    this.props.updateProfile(this.state.infoProfile, () => {
-      this.setState({ open: true });
-    });
+    if (title === "update") {
+      return this.props.updateProfile(this.state.infoProfile, () => {
+        this.setState({ open: true });
+      });
+    } else if (title === "pass") {
+      return this.props.changePasswordAct(this.state.changePass, () => {
+        this.setState({ open: true });
+        this.props.history.push("/signin")
+      });
+    }
   };
 
   handleOnClose = (event, reason) => {
@@ -111,8 +133,17 @@ export class ProfileContent extends Component {
         <Grid item lg={8} md={6} xl={8} xs={12}>
           <PersonalInfoForm
             values={this.state.infoProfile}
-            handleOnChange={this.handleOnChange}
-            handleOnSubmit={this.handleOnSubmit}
+            handleOnChange={e => this.handleOnChange(e, "update")}
+            handleOnSubmit={e => this.handleOnSubmit(e, "update")}
+            error={this.props.error}
+          />
+          <br />
+
+          <ChangePassword
+            values={this.state.changePass}
+            handleOnChange={e => this.handleOnChange(e, "pass")}
+            handleOnSubmit={e => this.handleOnSubmit(e, "pass")}
+            error={this.props.error}
           />
         </Grid>
         <Snackbar
@@ -135,7 +166,12 @@ export class ProfileContent extends Component {
   }
 }
 
+
+const mapStateToProps = state => ({
+  error: state.errors
+})
+
 export default connect(
-  null,
-  { getProfile, updateProfile, uploadImage }
+  mapStateToProps,
+  { getProfile, updateProfile, uploadImage, changePasswordAct }
 )(ProfileContent);

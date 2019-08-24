@@ -104,3 +104,15 @@ export const updateProfile = (data, callback) => {
   };
 };
 
+export const changePasswordAct = (data, callback) => {
+  return dispatch => {
+    Axios.put("/api/v1/users/change-password", data)
+      .then(res => {
+        dispatch(getErrors({}));
+        callback();
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};

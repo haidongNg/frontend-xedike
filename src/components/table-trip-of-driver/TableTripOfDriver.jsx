@@ -6,7 +6,6 @@ import {
   Chip,
   Grid,
   IconButton,
-  Tooltip
 } from "@material-ui/core";
 import {
   PersonPinCircle,
@@ -49,7 +48,7 @@ const TableTripOfDriver = ({
       <TableCell>
         <Group /> {data.availableSeats}
       </TableCell>
-      <TableCell>{data.tree}VNĐ</TableCell>
+      <TableCell>{data.fee}VNĐ</TableCell>
       <TableCell>
         <Chip
           label={data.isFinished ? "Hoàn thành" : "Chưa hoàn thành"}

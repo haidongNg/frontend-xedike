@@ -14,6 +14,7 @@ import { Menu } from "@material-ui/icons";
 import { connect } from "react-redux";
 import { logout } from "../../store/actions/auth";
 import CreateTrip from "../create-trip/CreateTrip";
+
 const useStyles = makeStyles(theme => ({
   root: {
     boxShadow: "none"
@@ -46,12 +47,6 @@ const Header = props => {
         <Button className={classes.signOutButton}>Đăng nhập</Button>
       </Link>
     </Fragment>
-  );
-
-  const renderButtonDrive = (
-    <Button className={classes.signOutButton} onClick={() => handleClickOpen()}>
-      Tạo chuyến đi
-    </Button>
   );
 
   const renderUserDriver = (

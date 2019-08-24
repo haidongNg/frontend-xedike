@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getTripHistory } from "../../../store/actions/user";
 import {
@@ -15,18 +15,25 @@ export class TripHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tripH: [],
+      tripH: []
     };
   }
   componentDidMount() {
-    this.props.getTripHistory(data => {
-      this.setState({ tripH: data });
-    });
+    this.props.getTripHistory();
   }
+
+  renderTable = () => {
+    return this.props.listTripH.map((data, index) => {
+      if (data.trip.isFinished)
+        return (
+          <TableRows key={index} index={index} data={data} hidden={false} />
+        );
+    });
+  };
 
   render() {
     return (
-      <Container component="main" fixed>
+      <Container component="main" fixed style={{minHeight: "65vh"}}>
         <Grid>
           <Grid item xs={12}>
             <Toolbar>
@@ -35,19 +42,7 @@ export class TripHistory extends Component {
           </Grid>
           <Grid item xs={12}>
             <Table>
-              <TableBody>
-                {this.state.tripH.map((data, index) => {
-                  if (data.trip.isFinished)
-                    return (
-                      <TableRows
-                        key={index}
-                        index={index}
-                        data={data}
-                        hidden={false}
-                      />
-                    );
-                })}
-              </TableBody>
+              <TableBody>{this.renderTable()}</TableBody>
             </Table>
           </Grid>
         </Grid>
@@ -56,7 +51,11 @@ export class TripHistory extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  listTripH: state.listHistory
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { getTripHistory }
 )(TripHistory);

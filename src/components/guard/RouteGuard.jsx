@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-const LoginGuard = ({ component: Component, path }) => {
+const RouteGuard = ({ component: Component, path }) => {
   return (
     <Route
       to={path}
@@ -10,10 +10,10 @@ const LoginGuard = ({ component: Component, path }) => {
         if (token && fingerprint) {
           return <Component {...props} />;
         }
-        return <Redirect to={{ pathname: "/signin", state: {from: props.location}}} />;
+        return <Redirect to={{ pathname: "/signin" }} />;
       }}
     />
   );
 };
 
-export default LoginGuard;
+export default RouteGuard;

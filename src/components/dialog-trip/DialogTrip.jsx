@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import PropsTypes from "prop-types";
-import moment from "moment";
 import {
   Dialog,
   DialogActions,
@@ -36,8 +35,8 @@ const DialogTrip = ({ onClose, value: valueProp, open, ...other }) => {
     onClose(value);
   };
 
-  const handleOnChange = (event) => {
-    setValue({...value, [event.target.name]: Number(event.target.value)});
+  const handleOnChange = event => {
+    setValue({ ...value, [event.target.name]: Number(event.target.value) });
   };
   return (
     <Dialog

@@ -17,7 +17,6 @@ export class DashboardPassenger extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tripList: [],
       open: false,
       value: {
         rate: 0,
@@ -30,13 +29,13 @@ export class DashboardPassenger extends Component {
   }
 
   componentDidMount() {
-    this.props.getTripHistory(data => {
-      this.setState({ tripList: data });
-    });
+    this.props.getTripHistory();
   }
 
+  com;
+
   handleClickItem = data => {
-    const { driver, trip } = data;
+    const { trip } = data;
     const passenger = trip.passengers.find(
       u => u.passengerId === this.props.match.params.id
     );
@@ -67,9 +66,7 @@ export class DashboardPassenger extends Component {
             tripId: ""
           }
         });
-        this.props.getTripHistory(data => {
-          this.setState({ tripList: data });
-        });
+        this.props.getTripHistory();
       });
     }
   };
@@ -79,7 +76,7 @@ export class DashboardPassenger extends Component {
   };
 
   renderTableRow = () => {
-    return this.state.tripList.map((data, index) => {
+    return this.props.listArr.map((data, index) => {
       if (data.trip.isFinished === false)
         return (
           <TableTripOfPassenger
@@ -93,7 +90,7 @@ export class DashboardPassenger extends Component {
   };
   render() {
     return (
-      <section className="hero is-bold">
+      <section className="hero is-bold is-medium" style={{ minHeight: "60vh" }}>
         <div className="hero-body">
           <Container component="main">
             <Grid container spacing={4}>
@@ -117,8 +114,11 @@ export class DashboardPassenger extends Component {
     );
   }
 }
+const mapStaToProps = state => ({
+  listArr: state.listHistory
+});
 
 export default connect(
-  null,
+  mapStaToProps,
   { getTripHistory, canBookTrip, rateDriver }
 )(DashboardPassenger);

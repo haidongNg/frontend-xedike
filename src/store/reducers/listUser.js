@@ -5,7 +5,7 @@ const initialState = [];
 const userReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case DATA_LIST_USER:
-      return [...state, ...payload];
+      return [...payload];
     default:
       return state;
   }

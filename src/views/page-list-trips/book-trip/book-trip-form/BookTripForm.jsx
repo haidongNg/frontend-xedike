@@ -14,10 +14,17 @@ import {
   InputLabel,
   FormLabel,
   RadioGroup,
-  Radio
+  Radio,
+  FormHelperText
 } from "@material-ui/core";
 import SelectCustom from "../../../../components/select-custom/SelectCustom";
-const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit, info }) => {
+const BookTripForm = ({
+  valuesForm,
+  handleOnchange,
+  handleOnSubmit,
+  info,
+  error
+}) => {
   return (
     <Card>
       <form autoComplete="off" noValidate onSubmit={handleOnSubmit}>
@@ -52,7 +59,12 @@ const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit, info }) => {
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <FormControl fullWidth required margin="dense">
+              <FormControl
+                fullWidth
+                required
+                margin="dense"
+                error={error.numberOfBookingSeats ? true : false}
+              >
                 <InputLabel>Số ghế đặt</InputLabel>
                 <Input
                   type="number"
@@ -60,6 +72,7 @@ const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit, info }) => {
                   value={valuesForm.numberOfBookingSeats}
                   onChange={handleOnchange}
                 />
+                <FormHelperText>{error.numberOfBookingSeats}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item md={6} xs={12}>
@@ -110,15 +123,6 @@ const BookTripForm = ({ valuesForm, handleOnchange, handleOnSubmit, info }) => {
         <Divider />
         <CardActions>
           <Button
-            disabled={
-                (info.availableSeats ||
-                info.locationGetIn ||
-                info.locationGetOff ||
-                info.paymentMethod
-              ) === undefined
-                ? true
-                : false
-            }
             fullWidth
             type="submit"
             variant="outlined"

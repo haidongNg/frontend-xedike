@@ -11,10 +11,12 @@ import {
   Input,
   InputLabel,
   Chip,
-  createMuiTheme
+  createMuiTheme,
+  FormHelperText
 } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import { green, red } from "@material-ui/core/colors";
+import SelectCustom from "../select-custom/SelectCustom";
 
 const theme = createMuiTheme({
   palette: {
@@ -23,7 +25,7 @@ const theme = createMuiTheme({
   }
 });
 
-const DialogCustom = ({ onClose, value: valueProp, open, ...other }) => {
+const DialogCustom = ({ onClose, value: valueProp, open, error, ...other }) => {
   const [value, setValue] = useState(valueProp);
   useEffect(() => {
     if (open) {
@@ -41,7 +43,7 @@ const DialogCustom = ({ onClose, value: valueProp, open, ...other }) => {
   const handleOnChange = event => {
     setValue({
       ...value,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   };
   return (
@@ -63,25 +65,29 @@ const DialogCustom = ({ onClose, value: valueProp, open, ...other }) => {
       </DialogTitle>
 
       <DialogContent dividers>
-        <FormControl fullWidth margin="dense">
-          <InputLabel>Điểm đi</InputLabel>
-          <Input
-            text="text"
-            name="locationFrom"
-            value={value.locationFrom}
-            onChange={handleOnChange}
-          />
-        </FormControl>
-        <FormControl fullWidth margin="dense">
-          <InputLabel>Điểm đến</InputLabel>
-          <Input
-            type="text"
-            name="locationTo"
-            value={value.locationTo}
-            onChange={handleOnChange}
-          />
-        </FormControl>
-        <FormControl fullWidth margin="dense">
+        <SelectCustom
+          required
+          variant="standard"
+          margin="dense"
+          name="locationFrom"
+          label="Điểm đi"
+          value={value.locationFrom}
+          onChangeSelect={handleOnChange}
+        />
+        <SelectCustom
+          required
+          variant="standard"
+          margin="dense"
+          name="locationTo"
+          label="Điểm đến"
+          value={value.locationTo}
+          onChangeSelect={handleOnChange}
+        />
+        <FormControl
+          fullWidth
+          margin="dense"
+          error={error.startTime ? true : false}
+        >
           <InputLabel>Thời gian bắt đầu</InputLabel>
           <Input
             type="datetime-local"
@@ -91,8 +97,13 @@ const DialogCustom = ({ onClose, value: valueProp, open, ...other }) => {
               .format("YYYY-MM-DDTHH:mm:ss.SSS")}
             onChange={handleOnChange}
           />
+          <FormHelperText>{error.startTime}</FormHelperText>
         </FormControl>
-        <FormControl fullWidth margin="dense">
+        <FormControl
+          fullWidth
+          margin="dense"
+          error={error.availableSeats ? true : false}
+        >
           <InputLabel>Số ghế</InputLabel>
           <Input
             type="number"
@@ -100,15 +111,17 @@ const DialogCustom = ({ onClose, value: valueProp, open, ...other }) => {
             value={value.availableSeats}
             onChange={handleOnChange}
           />
+          <FormHelperText>{error.availableSeats}</FormHelperText>
         </FormControl>
-        <FormControl fullWidth margin="dense">
+        <FormControl fullWidth margin="dense" error={error.fee ? true : false}>
           <InputLabel>Giá vé</InputLabel>
           <Input
             type="number"
-            name="tree"
-            value={value.tree}
+            name="fee"
+            value={value.fee}
             onChange={handleOnChange}
           />
+          <FormHelperText>{error.fee}</FormHelperText>
         </FormControl>
       </DialogContent>
       <DialogActions>

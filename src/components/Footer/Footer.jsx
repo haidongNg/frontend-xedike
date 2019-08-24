@@ -2,7 +2,7 @@ import React from "react";
 import { Call, Email } from "@material-ui/icons";
 const Footer = () => {
   return (
-    <footer className="footer">
+    <footer className="footer" style={{position: "relative"}}>
       <div className="tile is-ancestor">
         <div className="tile is-parent">
           <article className="tile is-child">

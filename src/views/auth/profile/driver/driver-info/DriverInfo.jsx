@@ -71,6 +71,7 @@ export class DriverInfo extends Component {
             infoDriver={this.state.infoDriver}
             handleOnChange={this.handleOnChange}
             hanldeOnSubmit={this.hanldeOnSubmit}
+            error={this.props.error}
           />
         </Card>
         <Snackbar
@@ -95,7 +96,8 @@ export class DriverInfo extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  driverProfile: state.driverProfile
+  driverProfile: state.driverProfile,
+  error: state.errors
 });
 
 export default connect(

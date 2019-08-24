@@ -10,9 +10,12 @@ import {
 } from "@material-ui/core";
 import TableTripOfDriver from "../../../components/table-trip-of-driver/TableTripOfDriver";
 import { getTripDriver } from "../../../store/actions/drivers";
-import { deleteTrip, updateTrip, finishTrip } from "../../../store/actions/trips";
+import {
+  deleteTrip,
+  updateTrip,
+  finishTrip
+} from "../../../store/actions/trips";
 import DialogCustom from "../../../components/dialog-custom/DialogCustom";
-import EmtyComponent from "../../../components/emty-component/EmtyComponent";
 
 export class DashboardDriver extends Component {
   constructor(props) {
@@ -26,7 +29,7 @@ export class DashboardDriver extends Component {
         locationTo: "",
         startTime: "",
         availableSeats: "",
-        tree: "",
+        fee: "",
         isFinished: false
       }
     };
@@ -34,9 +37,7 @@ export class DashboardDriver extends Component {
 
   componentDidMount() {
     const { match } = this.props;
-    this.props.getTripDriver(match.params.id, data => {
-      this.setState({ data: data });
-    });
+    this.props.getTripDriver(match.params.id);
   }
 
   handleClickItem = data => {
@@ -46,7 +47,7 @@ export class DashboardDriver extends Component {
       locationTo,
       startTime,
       availableSeats,
-      tree,
+      fee,
       isFinished
     } = data;
     this.setState({
@@ -57,43 +58,48 @@ export class DashboardDriver extends Component {
         locationFrom: locationFrom,
         locationTo: locationTo,
         startTime: startTime,
-        availableSeats: availableSeats,
-        tree: tree,
+        availableSeats: availableSeats.toString(),
+        fee: fee.toString(),
         isFinished: isFinished
       }
     });
   };
 
   handleClose = newValue => {
-    this.setState({ open: false });
     if (newValue) {
       const { match } = this.props;
-      this.props.updateTrip(newValue.id, newValue);
-      this.setState({
-        value: {
-          id: "",
-          locationFrom: "",
-          locationTo: "",
-          startTime: "",
-          availableSeats: "",
-          tree: "",
-          isFinished: false
-        }
+      this.props.updateTrip(newValue.id, newValue, () => {
+        this.setState({
+          open: false,
+          value: {
+            id: "",
+            locationFrom: "",
+            locationTo: "",
+            startTime: "",
+            availableSeats: "",
+            fee: "",
+            isFinished: false
+          }
+        });
+        this.props.getTripDriver(match.params.id);
       });
-      this.props.getTripDriver(match.params.id, data => {
-        this.setState({ data: data });
-      });
+    } else {
+      this.setState({ open: false });
     }
   };
 
   handleDelete = id => {
     this.props.deleteTrip(id);
+    const { match } = this.props;
+    this.props.getTripDriver(match.params.id);
   };
-  handleFinish = (tripId) => {
+  handleFinish = tripId => {
     this.props.finishTrip(tripId);
-  }
+    const { match } = this.props;
+    this.props.getTripDriver(match.params.id);
+  };
   renderTableRow = () => {
-    return this.state.data.map((data, index) => (
+    return this.props.data.map((data, index) => (
       <TableTripOfDriver
         key={index}
         data={data}
@@ -106,7 +112,7 @@ export class DashboardDriver extends Component {
 
   render() {
     return (
-      <section className="hero is-bold">
+      <section className="hero is-bold" style={{ minHeight: "65vh" }}>
         <div className="hero-body">
           <Container component="main">
             <Grid container spacing={4}>
@@ -121,19 +127,23 @@ export class DashboardDriver extends Component {
                   open={this.state.open}
                   onClose={this.handleClose}
                   value={this.state.value}
+                  error={this.props.error}
                 />
               </Grid>
             </Grid>
           </Container>
         </div>
-
-        <EmtyComponent />
       </section>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  error: state.errors,
+  data: state.tripDriver
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { getTripDriver, deleteTrip, updateTrip, finishTrip }
 )(DashboardDriver);

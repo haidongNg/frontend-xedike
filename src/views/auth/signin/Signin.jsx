@@ -68,7 +68,7 @@ const Signin = props => {
   });
   // const [open, setOpen] = useState(false);
   const classes = useStyles();
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState({ open: false });
   const [loading, setLoading] = React.useState(false);
   const timer = React.useRef();
 
@@ -79,7 +79,7 @@ const Signin = props => {
   }, []);
 
   const handleShowPassword = () => {
-    setShow(true ? false : true);
+    setShow({ open: !show.open });
   };
 
   const handleOnChange = event => {
@@ -104,7 +104,7 @@ const Signin = props => {
 
   return (
     <Fragment>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" style={{ minHeight: "57vh" }}>
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -142,12 +142,12 @@ const Signin = props => {
               <InputLabel>Mật khẩu</InputLabel>
               <Input
                 name="password"
-                type={show ? "text" : "password"}
+                type={show.open ? "text" : "password"}
                 id="password"
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton edge="end" onClick={handleShowPassword}>
-                      {show ? <VisibilityOff /> : <Visibility />}
+                      {show.open ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 }

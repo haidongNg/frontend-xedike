@@ -46,8 +46,8 @@ export class BookTrip extends Component {
       values: {
         locationGetIn: "",
         locationGetOff: "",
-        paymentMethod: "",
-        numberOfBookingSeats: 1,
+        paymentMethod: "tienmat",
+        numberOfBookingSeats: "",
         notes: ""
       },
       info: {},
@@ -73,17 +73,17 @@ export class BookTrip extends Component {
     if (isAuthenticated && profile.userType === "passenger") {
       const id = this.state.info._id;
       this.props.reservation(id, this.state.values, () => {
-        this.setState({ open: true });
-        this.props.history.push("/list-trips");
         this.setState({
+          open: true,
           values: {
             locationGetIn: "",
             locationGetOff: "",
             paymentMethod: "",
-            numberOfBookingSeats: 1,
+            numberOfBookingSeats: "",
             notes: ""
           }
         });
+        this.props.history.push("/list-trips");
       });
     } else {
       this.setState({ open: true });
@@ -119,6 +119,7 @@ export class BookTrip extends Component {
                 valuesForm={this.state.values}
                 handleOnchange={this.handleOnchange}
                 handleOnSubmit={this.handleOnSubmit}
+                error={this.props.error}
               />
             </Grid>
           </Grid>
@@ -148,7 +149,8 @@ export class BookTrip extends Component {
   }
 }
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  error: state.errors
 });
 
 export default connect(

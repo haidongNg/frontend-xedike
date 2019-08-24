@@ -115,7 +115,7 @@ const CarInfoForm = ({
               <FormControl fullWidth required margin="dense">
                 <InputLabel>Năm sản xuất</InputLabel>
                 <Input
-                  type="text"
+                  type="number"
                   name="manufacturingYear"
                   value={carInfo.manufacturingYear}
                   onChange={handleOnchange}
@@ -126,7 +126,7 @@ const CarInfoForm = ({
               <FormControl fullWidth required margin="dense">
                 <InputLabel>Số ghế trên xe</InputLabel>
                 <Input
-                  type="text"
+                  type="number"
                   name="numberOfSeats"
                   value={carInfo.numberOfSeats}
                   onChange={handleOnchange}
@@ -148,7 +148,7 @@ const CarInfoForm = ({
         </CardContent>
         <Divider />
         <CardActions>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="outlined" color="primary">
             {carInfo._id ? "Cập nhật thông tin xe" : "Thêm thông tin xe"}
           </Button>
         </CardActions>

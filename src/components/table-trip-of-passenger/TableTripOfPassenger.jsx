@@ -6,10 +6,11 @@ import {
   makeStyles,
   Grid,
   Chip,
-  IconButton
+  IconButton,
+  Tooltip
 } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
-import { calcRate } from '../../shared/utils/utils'
+import { calcRate } from "../../shared/utils/utils";
 import {
   PersonPinCircle,
   Place,
@@ -26,12 +27,17 @@ const useStyles = makeStyles(theme => ({
     margin: 10
   }
 }));
-const TableTripOfPassenger = ({ index, data, handleClickItem, deleteTripUser }) => {
+const TableTripOfPassenger = ({
+  index,
+  data,
+  handleClickItem,
+  deleteTripUser
+}) => {
   const classes = useStyles();
-  
+
   return (
     <TableRow key={index}>
-      <TableCell >
+      <TableCell>
         <PersonPinCircle />
         {data.trip.locationFrom}
       </TableCell>
@@ -66,7 +72,8 @@ const TableTripOfPassenger = ({ index, data, handleClickItem, deleteTripUser }) 
         <Grid container spacing={2}>
           <Grid item>
             <Avatar
-              src={data.driver.userId.avatar || data.trip.driverId.avatar}
+              src={`http://localhost:5000/${data.driver.userId.avatar ||
+                data.trip.driverId.avatar}`}
               className={classes.avatar}
             />
           </Grid>
@@ -76,17 +83,21 @@ const TableTripOfPassenger = ({ index, data, handleClickItem, deleteTripUser }) 
           </Grid>
         </Grid>
       </TableCell>
-      <TableCell>{data.trip.tree}VNĐ</TableCell>
+      <TableCell>{data.trip.fee}VNĐ</TableCell>
       <TableCell>
         <Chip color="secondary" label="Đang chạy" />
       </TableCell>
       <TableCell>
-        <IconButton  onClick={handleClickItem}>
-          <RateReview />
-        </IconButton>
-        <IconButton onClick={deleteTripUser} >
-          <Cancel />
-        </IconButton>
+        <Tooltip title="Đánh giá">
+          <IconButton onClick={handleClickItem}>
+            <RateReview />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Hủy chuyến đi">
+          <IconButton onClick={deleteTripUser}>
+            <Cancel />
+          </IconButton>
+        </Tooltip>
       </TableCell>
     </TableRow>
   );

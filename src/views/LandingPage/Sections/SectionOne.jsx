@@ -3,7 +3,9 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
-import Icon from "@material-ui/core/Icon";
+import {
+  LocationOn, DateRange, Search, AirlineSeatLegroomExtra
+} from "@material-ui/icons";
 import Button from "@material-ui/core/Button";
 const SectionOne = () => {
   return (
@@ -42,7 +44,7 @@ const SectionOne = () => {
                         type="text"
                         endAdornment={
                           <InputAdornment position="end">
-                            <Icon>location_on</Icon>
+                            <LocationOn />
                           </InputAdornment>
                         }
                       />
@@ -55,7 +57,7 @@ const SectionOne = () => {
                         type="text"
                         endAdornment={
                           <InputAdornment position="end">
-                            <Icon>location_on</Icon>
+                            <LocationOn />
                           </InputAdornment>
                         }
                       />
@@ -69,7 +71,7 @@ const SectionOne = () => {
                         defaultValue="2019-07-20"
                         endAdornment={
                           <InputAdornment position="end">
-                            <Icon>date_range</Icon>
+                            <DateRange />
                           </InputAdornment>
                         }
                       />
@@ -83,7 +85,7 @@ const SectionOne = () => {
                         defaultValue={1}
                         endAdornment={
                           <InputAdornment position="end">
-                            <Icon>airline_seat_legroom_extra</Icon>
+                            <AirlineSeatLegroomExtra />
                           </InputAdornment>
                         }
                       />
@@ -92,7 +94,7 @@ const SectionOne = () => {
 
                   <div className="column" style={{ margin: "auto" }}>
                     <Button fullWidth size="medium">
-                      Tìm kiếm <Icon>search</Icon>
+                      Tìm kiếm <Search />
                     </Button>
                   </div>
                 </form>

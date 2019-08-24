@@ -1,7 +1,7 @@
 import Axios from "axios";
 import _ from "lodash";
 import { getErrors } from "../actions/errors";
-import { PROFILEDRIVER } from "../constans/types";
+import { PROFILEDRIVER, DATA_TRIP_DRIVER } from "../constans/types";
 
 export const setProfileDriver = profile => {
   return {
@@ -102,12 +102,10 @@ export const updateCar = (id, data, callback) => {
 
 export const uploadCarImage = (carId, formData, callback) => {
   return dispatch => {
-    Axios.post(
-      `/api/v1/users/drivers/upload-car/${carId}`,
-      formData
-    )
+    Axios.post(`/api/v1/users/drivers/upload-car/${carId}`, formData)
       .then(res => {
         console.log(res.data);
+        dispatch(getErrors({}));
         callback(res.data);
       })
       .catch(err => {
@@ -142,16 +140,25 @@ export const getDriverUSer = callback => {
   };
 };
 
-
 export const getTripDriver = (id, callback) => {
   return dispatch => {
     Axios.get(`/api/v1/users/drivers/getTripDriver/${id}`)
-    .then(res => {
-      dispatch(getErrors({}));
-      callback(res.data);
-    })
-    .catch(err => {
-      dispatch(getErrors(_.get(err, "response.data", "")));
-    })
-  }
-}
+      .then(res => {
+        dispatch(getErrors({}));
+        dispatch(setTripDriver(res.data))
+        callback();
+      })
+      .catch(err => {
+        dispatch(getErrors(_.get(err, "response.data", "")));
+      });
+  };
+};
+
+
+export const setTripDriver = data => {
+  return {
+    type: DATA_TRIP_DRIVER,
+    payload: data
+  };
+};
+

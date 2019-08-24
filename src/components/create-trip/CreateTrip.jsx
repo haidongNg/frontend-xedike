@@ -12,7 +12,8 @@ import {
   FormControl,
   InputLabel,
   Input,
-  InputAdornment
+  InputAdornment,
+  FormHelperText
 } from "@material-ui/core";
 import { createTrip } from "../../store/actions/trips";
 import SelectCustom from "../select-custom/SelectCustom";
@@ -24,7 +25,7 @@ const CreateTrip = props => {
     locationTo: "",
     startTime: new Date(),
     availableSeats: "",
-    tree: ""
+    fee: ""
   });
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const CreateTrip = props => {
         locationTo: "",
         startTime: "",
         availableSeats: "",
-        tree: ""
+        fee: ""
       });
     }
   }, [open]);
@@ -49,12 +50,13 @@ const CreateTrip = props => {
   const handleOnSubmit = event => {
     event.preventDefault();
     props.createTrip(valueForm, () => {
+      onClose();
       setValueForm({
         locationFrom: "",
         locationTo: "",
         startTime: "",
         availableSeats: "",
-        tree: ""
+        fee: ""
       });
     });
   };
@@ -83,16 +85,23 @@ const CreateTrip = props => {
               value={valueForm.locationTo}
               onChangeSelect={handleOnchange}
             />
-            <FormControl margin="dense" fullWidth>
+            <FormControl
+              margin="dense"
+              fullWidth
+              error={props.error.startTime ? true : false}
+            >
               <InputLabel shrink>Ngày khởi hành</InputLabel>
               <Input
                 type="datetime-local"
                 name="startTime"
-                value={moment(valueForm.startTime).utc().format('YYYY-MM-DDTHH:mm:ss.SSS')}
+                value={moment(valueForm.startTime)
+                  .utc()
+                  .format("YYYY-MM-DDTHH:mm:ss.SSS")}
                 onChange={handleOnchange}
               />
+              <FormHelperText>{props.error.startTime}</FormHelperText>
             </FormControl>
-            <FormControl margin="dense" fullWidth>
+            <FormControl margin="dense" fullWidth error={props.error.availableSeats ? true : false}>
               <InputLabel>Số ghế hàng khách</InputLabel>
               <Input
                 type="number"
@@ -100,23 +109,32 @@ const CreateTrip = props => {
                 value={valueForm.availableSeats}
                 onChange={handleOnchange}
               />
+              <FormHelperText>{props.error.availableSeats}</FormHelperText>
             </FormControl>
-            <FormControl margin="dense" fullWidth>
+            <FormControl margin="dense" fullWidth error={props.error.fee ? true : false}>
               <InputLabel>Số phí</InputLabel>
               <Input
                 type="number"
-                name="tree"
+                name="fee"
                 endAdornment={
                   <InputAdornment position="end">VNĐ</InputAdornment>
                 }
-                value={valueForm.tree}
+                value={valueForm.fee}
                 onChange={handleOnchange}
               />
+              <FormHelperText>{props.error.fee}</FormHelperText>
             </FormControl>
           </DialogContent>
           <DialogActions>
-            <Button onClick={onClose}>Hủy</Button>
-            <Button type="submit" onClick={onClose}>
+            <Button onClick={onClose} variant="outlined" color="secondary">
+              Hủy
+            </Button>
+            <Button
+              type="submit"
+             // onClick={onClose}
+              variant="outlined"
+              color="primary"
+            >
               Tạo chuyến đi
             </Button>
           </DialogActions>
@@ -132,7 +150,11 @@ CreateTrip.propTypes = {
   disable: PropTypes.bool
 };
 
+const mapStateToProps = state => ({
+  error: state.errors
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { createTrip }
 )(CreateTrip);

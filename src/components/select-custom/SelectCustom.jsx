@@ -1,5 +1,11 @@
 import React from "react";
-import { FormControl, Select, MenuItem, InputLabel } from "@material-ui/core";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormHelperText
+} from "@material-ui/core";
 import { connect } from "react-redux";
 
 const ITEM_HEIGHT = 48;
@@ -19,10 +25,16 @@ const SelectCustom = ({
   name,
   value,
   onChangeSelect,
-  district
+  district,
+  error
 }) => {
   return (
-    <FormControl fullWidth variant={variant} margin={margin}>
+    <FormControl
+      fullWidth
+      variant={variant}
+      margin={margin}
+      error={error.locationFrom || error.locationTo ? true : false}
+    >
       <InputLabel>{label}</InputLabel>
       <Select
         name={name}
@@ -39,12 +51,14 @@ const SelectCustom = ({
           );
         })}
       </Select>
+      <FormHelperText>{error.locationFrom || error.locationTo}</FormHelperText>
     </FormControl>
   );
 };
 
 const mapStateToProps = state => ({
-  district: state.district
+  district: state.district,
+  error: state.errors
 });
 
 export default connect(

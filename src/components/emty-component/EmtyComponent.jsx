@@ -2,14 +2,14 @@ import React from "react";
 
 const EmtyComponent = () => {
   return (
-    <div className="">
+    <section className="" style={{display: "inline-block"}}>
       <div className="mainLoad">
         <div className="ball" />
         <div className="ball" />
         <div className="ball" />
         <div className="ball" />
       </div>
-    </div>
+    </section>
   );
 };
 
